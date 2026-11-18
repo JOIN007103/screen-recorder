@@ -146,19 +146,18 @@ Compress-Archive -Path "$dst\*" -DestinationPath "D:\录屏软件_源码包.zip"
 </ol>
 
 <h3>方案 B：用 Git 同步（推荐长期维护）</h3>
+<p><strong>仓库已建立（公开）</strong>：<code>https://github.com/JOIN007103/screen-recorder</code>。已推送 84 个源码与文档文件，提交历史使用 noreply 邮箱，不含个人邮箱、令牌或试录视频。</p>
 <ol>
-<li>新电脑安装 Git，并在 <code>D:\ScreenRecorder</code> 打开 PowerShell。</li>
-<li>原电脑初始化并推送（<strong>仓库务必设为私有</strong>）：
+<li>新电脑安装 Git 与 .NET SDK 8.0.428，任选目录打开 PowerShell，克隆：
+<pre><code>git clone https://github.com/JOIN007103/screen-recorder.git D:\ScreenRecorder</code></pre></li>
+<li><strong>补回 FFmpeg（必做）</strong>：GitHub 单文件上限 100MB，<code>ffmpeg.exe</code>（125.6MB）无法入库，故未随源码上传。在克隆目录运行随包的获取脚本，它会自动下载 FFmpeg 6.0、校验 SHA256 并放回 <code>ScreenRecorder\tools\</code>：
 <pre><code>cd D:\ScreenRecorder
-git init
-git add .
-git status          # 核对：列表里不应出现 bin/obj/Videos/settings.json/logs
-git commit -m "initial v1.0.0"
-git remote add origin &lt;你的私有仓库地址&gt;
-git push -u origin main</code></pre></li>
-<li>新电脑拉取：<code>git clone &lt;仓库地址&gt; D:\ScreenRecorder</code></li>
-<li><strong>凭证</strong>：HTTPS 仓库需要 Git 账号 + 个人访问令牌（PAT）；SSH 仓库需要密钥对。这是整个项目唯一可能用到凭证的地方，项目本身没有任何账号体系。</li>
+powershell -ExecutionPolicy Bypass -File .\fetch-ffmpeg.ps1</code></pre>
+脚本自带 7zr 解压器下载，无需预装工具；国内网络会自动走镜像源。看到「SHA256 校验通过」即成功。</li>
+<li>核对文件：<code>ScreenRecorder\tools\ffmpeg.exe</code> 应已存在（125.6MB）。哈希校验值见附录。</li>
+<li><strong>后续修改同步</strong>：<code>git add -A &amp;&amp; git commit -m "改动说明" &amp;&amp; git push</code>。HTTPS 推送需要个人访问令牌（PAT），建议设置有效期并只勾 <code>repo</code> 权限，用完及时删除。</li>
 </ol>
+<p class="note">注意：本机若配置了指向 <code>127.0.0.1</code> 的代理且该代理不通，Git 会报 <code>CONNECT tunnel failed 502</code>。此时用 <code>git -c http.proxy= -c https.proxy= push</code> 绕过代理即可。</p>
 
 <h3>方案 C：只分发绿色版</h3>
 <p>把 <code>ScreenRecorder_v1.0.0_green.zip</code> 和 <code>.sha256.txt</code> 一起发出。对方校验哈希后解压即用，不需要本指南。</p>

@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>桌面电脑录屏软件 · 开发规划</title>
+<style>
+  :root{
+    --navy:#1F3A5F; --navy-d:#162C49; --blue:#2E5C8A; --accent:#C8A24B;
+    --ink:#243040; --ink-2:#4C5B6E; --ink-3:#7A8798;
+    --line:#D8E0E8; --line-2:#E8EEF4; --bg:#F4F6F9; --panel:#FFFFFF;
+    --blue-bg:#EAF1F8; --amber-bg:#FBF5E6; --green-bg:#EAF4EF;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif;
+    font-size:14px; line-height:1.75; -webkit-font-smoothing:antialiased;
+  }
+  .page{ width:210mm; min-height:297mm; margin:24px auto; background:var(--panel);
+    box-shadow:0 2px 18px rgba(31,58,95,.10); padding:20mm 18mm; }
+
+  /* Cover */
+  .cover{ border-top:6px solid var(--navy); padding-top:26mm; }
+  .cover .eyebrow{ color:var(--accent); font-weight:700; letter-spacing:3px; font-size:13px; }
+  .cover h1{ font-size:34px; line-height:1.35; color:var(--navy-d); margin:14px 0 6px; font-weight:800; }
+  .cover .sub{ font-size:17px; color:var(--blue); font-weight:600; margin-bottom:40px; }
+  .cover .rule{ width:64px; height:4px; background:var(--accent); margin-bottom:34px; }
+  .meta{ width:100%; border-collapse:collapse; margin-top:20px; }
+  .meta td{ padding:9px 0; border-bottom:1px solid var(--line-2); font-size:14px; }
+  .meta td.k{ width:120px; color:var(--ink-3); font-weight:600; }
+  .meta td.v{ color:var(--ink); font-weight:600; }
+  .cover .note{ margin-top:46px; padding:16px 20px; background:var(--blue-bg);
+    border-left:4px solid var(--blue); color:var(--ink-2); font-size:13px; border-radius:0 6px 6px 0; }
+
+  /* Sections */
+  section{ margin-top:14mm; }
+  .sec-h{ display:flex; align-items:center; gap:12px; border-bottom:2px solid var(--navy);
+    padding-bottom:9px; margin-bottom:18px; }
+  .sec-h .num{ background:var(--navy); color:#fff; width:30px; height:30px; border-radius:5px;
+    display:flex; align-items:center; justify-content:center; font-weight:700; font-size:15px; flex:0 0 auto; }
+  .sec-h h2{ font-size:21px; color:var(--navy-d); margin:0; font-weight:800; }
+  h3{ font-size:16px; color:var(--navy); margin:24px 0 10px; font-weight:700;
+    padding-left:11px; border-left:3px solid var(--accent); }
+  p{ margin:8px 0; }
+  .lead{ color:var(--ink-2); font-size:13.5px; }
+
+  /* Tables */
+  table.dt{ width:100%; border-collapse:collapse; margin:12px 0 6px; font-size:13px; }
+  table.dt th{ background:var(--navy); color:#fff; font-weight:600; text-align:left;
+    padding:10px 12px; border:1px solid var(--navy-d); }
+  table.dt td{ padding:9px 12px; border:1px solid var(--line); vertical-align:top; }
+  table.dt tr:nth-child(even) td{ background:#F8FAFC; }
+  table.dt td.c{ text-align:center; }
+  .tag{ display:inline-block; padding:1px 9px; border-radius:11px; font-size:12px; font-weight:700; white-space:nowrap; }
+  .t-p0{ background:#FCE9E7; color:#B23A32; }
+  .t-p1{ background:var(--blue-bg); color:var(--blue); }
+  .t-p2{ background:#EEF1F4; color:var(--ink-2); }
+  .t-ok{ background:var(--green-bg); color:#22704A; }
+
+  /* Cards */
+  .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0; }
+  .card{ border:1px solid var(--line); border-radius:8px; padding:15px 17px; background:#fff; }
+  .card .ct{ font-weight:700; color:var(--navy); font-size:15px; margin-bottom:7px; }
+  .card ul{ margin:6px 0 0; padding-left:18px; }
+  .card li{ margin:4px 0; color:var(--ink-2); font-size:13px; }
+  .callout{ background:var(--amber-bg); border:1px solid #EBD9A6; border-left:4px solid var(--accent);
+    border-radius:0 6px 6px 0; padding:13px 17px; margin:14px 0; font-size:13px; color:#6B5620; }
+  .callout b{ color:#4E3D12; }
+
+  ul.clean{ padding-left:20px; margin:8px 0; }
+  ul.clean li{ margin:6px 0; }
+  .muted{ color:var(--ink-3); font-size:12.5px; }
+
+  /* Phase blocks */
+  .phase{ display:flex; gap:16px; padding:14px 0; border-bottom:1px dashed var(--line); }
+  .phase:last-child{ border-bottom:none; }
+  .phase .badge{ flex:0 0 92px; }
+  .phase .badge .pn{ background:var(--navy); color:#fff; border-radius:6px; padding:6px 0;
+    text-align:center; font-weight:700; font-size:14px; }
+  .phase .badge .pw{ text-align:center; color:var(--ink-3); font-size:12px; margin-top:6px; }
+  .phase .pb{ flex:1; }
+  .phase .pb .pt{ font-weight:700; color:var(--navy-d); font-size:15px; margin-bottom:4px; }
+  .phase .pb .pd{ color:var(--ink-2); font-size:13px; }
+  .phase .pb .pd b{ color:var(--ink); }
+
+  figure{ margin:16px 0; }
+  figure svg{ width:100%; height:auto; display:block; }
+  figcaption{ text-align:center; color:var(--ink-3); font-size:12px; margin-top:8px; }
+
+  .footer{ margin-top:16mm; padding-top:14px; border-top:1px solid var(--line);
+    display:flex; justify-content:space-between; color:var(--ink-3); font-size:12px; }
+
+  @page{ size:A4; margin:0; }
+  @media print{
+    body{ background:#fff; }
+    .page{ margin:0; box-shadow:none; width:210mm; min-height:297mm; padding:18mm 16mm; }
+    section{ break-inside:avoid; }
+    .sec-h{ break-after:avoid; }
+    table.dt, figure, .card{ break-inside:avoid; }
+    .phase{ break-inside:avoid; }
+    .cover{ break-after:page; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ COVER ============ -->
+<div class="page">
+  <div class="cover">
+    <div class="eyebrow">PROJECT PLANNING · 项目规划</div>
+    <h1>桌面电脑录屏软件<br>开发规划书</h1>
+    <div class="sub">屏幕捕获 · 鼠标操作与点击提示 · 录制控制 · 通用视频导出与回放</div>
+    <div class="rule"></div>
+
+    <table class="meta">
+      <tr><td class="k">文档版本</td><td class="v">V1.0 · 决策冻结版</td></tr>
+      <tr><td class="k">规划范围</td><td>规划阶段，不含代码实现</td></tr>
+      <tr><td class="k">目标平台</td><td>Windows 10 / 11</td></tr>
+      <tr><td class="k">交付形态</td><td>个人自用优先，预留内部分发扩展</td></tr>
+      <tr><td class="k">团队与工期</td><td>1 人开发 · 约 18–20 周（估算基准）</td></tr>
+      <tr><td class="k">编制日期</td><td>2026-11-17</td></tr>
+    </table>
+
+    <div class="note">
+      <b>文档说明：</b>本规划基于 11 项关键决策的逐项确认结果编制，决策已冻结。文档覆盖核心功能范围、模块划分、功能优先级、里程碑安排、测试重点、风险应对六项要素，并适配 A4 打印，可直接打印或另存为 PDF。
+    </div>
+  </div>
+  <div class="footer"><span>桌面电脑录屏软件 · 开发规划</span><span>V1.0 / 决策冻结版</span></div>
+</div>
+
+<!-- ============ 1 决策冻结 ============ -->
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">1</span><h2>关键假设与决策冻结</h2></div>
+    <p class="lead">以下 11 项决策已通过选择题逐项确认并冻结，构成后续全部规划工作的约束基线。</p>
+
+    <table class="dt">
+      <thead><tr><th style="width:13%">决策项</th><th style="width:30%">最终结论</th><th>对规划的影响</th></tr></thead>
+      <tbody>
+        <tr><td>目标操作系统</td><td>仅 Windows 10/11</td><td>技术栈聚焦，捕获方案单一，工期可控</td></tr>
+        <tr><td>团队与工期</td><td>1 人，22 周基准</td><td>沿用里程碑估算，范围收敛后有望压缩</td></tr>
+        <tr><td>产品定位</td><td>先个人自用，好用再内部分发</td><td>阶段 3 先做免安装器交付，预留分发扩展</td></tr>
+        <tr><td>剪辑边界</td><td>不含剪辑，仅录制 + 回放</td><td>MVP 边界锁定</td></tr>
+        <tr><td>声音方案</td><td>首版不录声音</td><td>音频与音画同步模块移出 MVP，降为阶段 2</td></tr>
+        <tr><td>录制范围</td><td>仅全屏</td><td>窗口 / 区域 / 多屏列为后续增强</td></tr>
+        <tr><td>鼠标效果</td><td>点击涟漪 + 光标高亮 + 鼠标轨迹</td><td>三项全部纳入 MVP，效果渲染工作量上升</td></tr>
+        <tr><td>清晰度帧率</td><td>1080p / 30fps</td><td>与默认基线一致</td></tr>
+        <tr><td>导出格式</td><td>H.264 + MP4</td><td>兼容性目标达成，主流电脑与手机可播</td></tr>
+        <tr><td>性能目标</td><td>流畅优先</td><td>编码策略偏向低占用，画质适度妥协</td></tr>
+        <tr><td>文件时长</td><td>不设上限，手动停止</td><td>存储模块最简化</td></tr>
+      </tbody>
+    </table>
+
+    <h3>相对初始草案的关键变更</h3>
+    <div class="grid2">
+      <div class="card">
+        <div class="ct">① 声音模块整体后移</div>
+        <ul><li>MVP 由"含音频"变为"纯画面录制"</li><li>音画同步风险从阶段 1 推迟到阶段 2</li><li>捕获链路简化</li></ul>
+      </div>
+      <div class="card">
+        <div class="ct">② 鼠标效果范围扩大</div>
+        <ul><li>由默认 1 项增至 3 项</li><li>效果渲染模块工作量上升</li><li>轨迹逐帧绘制成为新风险点</li></ul>
+      </div>
+      <div class="card">
+        <div class="ct">③ 产品定位分两阶段</div>
+        <ul><li>阶段 3 不引入安装器与授权</li><li>仅保留最简交付</li><li>转内部分发时再补打包能力</li></ul>
+      </div>
+      <div class="card">
+        <div class="ct">④ 工期出现余量</div>
+        <ul><li>阶段 1 由 6 周压缩至约 4–5 周</li><li>整体 22 周收敛至约 18–20 周</li><li>需以技术验证结果实测校准</li></ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <b>待你在后续确认的收尾事项：</b>阶段 3 的交付形式（绿色免安装版 / 安装器）与内部分发方案的取舍，可在 MVP 验证"好用"之后再定，不阻塞阶段 0–2 推进。
+    </div>
+  </section>
+  <div class="footer"><span>桌面电脑录屏软件 · 开发规划</span><span>1 / 关键假设与决策冻结</span></div>
+</div>
+
+<!-- ============ 2 模块划分 ============ -->
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">2</span><h2>核心功能范围与模块划分</h2></div>
+    <p class="lead">系统按"交互控制 → 数据采集 → 处理编码 → 输出回放"四层组织，共 13 个核心模块，形成一条自顶向下的数据流水线。MVP 与增强阶段的差异体现在每层内模块的<strong>深度</strong>，而非层级结构本身。</p>
+
+    <figure>
+      <svg viewBox="0 0 680 542" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="模块分层架构图">
+        <rect x="40" y="50" width="600" height="100" rx="12" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+        <text x="56" y="70" font-size="14" font-weight="700" fill="#1F3A5F">交互与控制层</text>
+        <g font-size="13" fill="#1F3A5F">
+          <rect x="56" y="82" width="133" height="56" rx="8" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+          <text x="122.5" y="104" text-anchor="middle" font-weight="700">主界面</text><text x="122.5" y="123" text-anchor="middle" font-size="11.5" fill="#4C5B6E">参数设置</text>
+          <rect x="201" y="82" width="133" height="56" rx="8" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+          <text x="267.5" y="104" text-anchor="middle" font-weight="700">悬浮控制条</text><text x="267.5" y="123" text-anchor="middle" font-size="11.5" fill="#4C5B6E">开始暂停停止</text>
+          <rect x="346" y="82" width="133" height="56" rx="8" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+          <text x="412.5" y="104" text-anchor="middle" font-weight="700">快捷键</text><text x="412.5" y="123" text-anchor="middle" font-size="11.5" fill="#4C5B6E">全局热键</text>
+          <rect x="491" y="82" width="133" height="56" rx="8" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+          <text x="557.5" y="104" text-anchor="middle" font-weight="700">录制状态机</text><text x="557.5" y="123" text-anchor="middle" font-size="11.5" fill="#4C5B6E">流程控制</text>
+        </g>
+        <path d="M340 150 L340 170" fill="none" stroke="#888" stroke-width="1.5" marker-end="url(#ar)"/>
+
+        <rect x="40" y="174" width="600" height="100" rx="12" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+        <text x="56" y="194" font-size="14" font-weight="700" fill="#1F3A5F">采集层</text>
+        <g font-size="13" fill="#1F3A5F">
+          <rect x="56" y="206" width="178" height="56" rx="8" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+          <text x="145" y="228" text-anchor="middle" font-weight="700">屏幕捕获</text><text x="145" y="247" text-anchor="middle" font-size="11.5" fill="#4C5B6E">全屏（MVP）</text>
+          <rect x="250" y="206" width="178" height="56" rx="8" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+          <text x="339" y="228" text-anchor="middle" font-weight="700">音频采集</text><text x="339" y="247" text-anchor="middle" font-size="11.5" fill="#4C5B6E">阶段 2 纳入</text>
+          <rect x="444" y="206" width="178" height="56" rx="8" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+          <text x="533" y="228" text-anchor="middle" font-weight="700">鼠标事件</text><text x="533" y="247" text-anchor="middle" font-size="11.5" fill="#4C5B6E">点击位置捕获</text>
+        </g>
+        <path d="M340 274 L340 294" fill="none" stroke="#888" stroke-width="1.5" marker-end="url(#ar)"/>
+
+        <rect x="40" y="298" width="600" height="100" rx="12" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+        <text x="56" y="318" font-size="14" font-weight="700" fill="#1F3A5F">处理与编码层</text>
+        <g font-size="13" fill="#22704A">
+          <rect x="56" y="330" width="178" height="56" rx="8" fill="#EAF4EF" stroke="#22704A" stroke-width="0.5"/>
+          <text x="145" y="352" text-anchor="middle" font-weight="700">效果渲染</text><text x="145" y="371" text-anchor="middle" font-size="11.5" fill="#4C5B6E">涟漪/高亮/轨迹</text>
+          <rect x="250" y="330" width="178" height="56" rx="8" fill="#EAF4EF" stroke="#22704A" stroke-width="0.5"/>
+          <text x="339" y="352" text-anchor="middle" font-weight="700">音视频编码</text><text x="339" y="371" text-anchor="middle" font-size="11.5" fill="#4C5B6E">H.264 硬件编码</text>
+          <rect x="444" y="330" width="178" height="56" rx="8" fill="#EAF4EF" stroke="#22704A" stroke-width="0.5"/>
+          <text x="533" y="352" text-anchor="middle" font-weight="700">混音与同步</text><text x="533" y="371" text-anchor="middle" font-size="11.5" fill="#4C5B6E">阶段 2 纳入</text>
+        </g>
+        <path d="M340 398 L340 418" fill="none" stroke="#888" stroke-width="1.5" marker-end="url(#ar)"/>
+
+        <rect x="40" y="422" width="600" height="100" rx="12" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+        <text x="56" y="442" font-size="14" font-weight="700" fill="#1F3A5F">输出与回放层</text>
+        <g font-size="13" fill="#22704A">
+          <rect x="56" y="454" width="178" height="56" rx="8" fill="#EAF4EF" stroke="#22704A" stroke-width="0.5"/>
+          <text x="145" y="476" text-anchor="middle" font-weight="700">MP4 封装</text><text x="145" y="495" text-anchor="middle" font-size="11.5" fill="#4C5B6E">通用容器格式</text>
+          <rect x="250" y="454" width="178" height="56" rx="8" fill="#EAF4EF" stroke="#22704A" stroke-width="0.5"/>
+          <text x="339" y="476" text-anchor="middle" font-weight="700">文件存储</text><text x="339" y="495" text-anchor="middle" font-size="11.5" fill="#4C5B6E">手动停止落盘</text>
+          <rect x="444" y="454" width="178" height="56" rx="8" fill="#EAF4EF" stroke="#22704A" stroke-width="0.5"/>
+          <text x="533" y="476" text-anchor="middle" font-weight="700">内置回放</text><text x="533" y="495" text-anchor="middle" font-size="11.5" fill="#4C5B6E">播放预览校验</text>
+        </g>
+        <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="#888" stroke-width="1.5" stroke-linecap="round"/></marker></defs>
+      </svg>
+      <figcaption>图 1 · 四层模块架构与数据流水线（灰色标注项纳入后续阶段）</figcaption>
+    </figure>
+
+    <h3>模块职责说明</h3>
+    <table class="dt">
+      <thead><tr><th style="width:22%">模块</th><th style="width:46%">职责</th><th>阶段</th></tr></thead>
+      <tbody>
+        <tr><td>主界面 / 悬浮控制条</td><td>参数设置、录制入口、开始/暂停/停止操作面板</td><td><span class="tag t-p0">MVP</span></td></tr>
+        <tr><td>录制状态机</td><td>管理空闲/录制/暂停/保存的状态切换，保证闭环正确</td><td><span class="tag t-p0">MVP</span></td></tr>
+        <tr><td>屏幕捕获</td><td>Windows 全屏画面采集，1080p/30fps</td><td><span class="tag t-p0">MVP</span></td></tr>
+        <tr><td>鼠标事件 + 效果渲染</td><td>点击位置捕获，涟漪、光标高亮、轨迹三项效果叠加</td><td><span class="tag t-p0">MVP</span></td></tr>
+        <tr><td>音视频编码 / MP4 封装</td><td>H.264 硬件编码优先、流畅优先策略，MP4 封装</td><td><span class="tag t-p0">MVP</span></td></tr>
+        <tr><td>文件存储 / 内置回放</td><td>手动停止落盘、播放预览校验</td><td><span class="tag t-p0">MVP</span></td></tr>
+        <tr><td>音频采集 / 混音同步</td><td>系统音+麦克风采集、混音、音画时间戳对齐</td><td><span class="tag t-p1">阶段 2</span></td></tr>
+        <tr><td>窗口/区域/多屏捕获</td><td>扩展录制范围与坐标处理</td><td><span class="tag t-p1">阶段 2–3</span></td></tr>
+      </tbody>
+    </table>
+  </section>
+  <div class="footer"><span>桌面电脑录屏软件 · 开发规划</span><span>2 / 模块划分</span></div>
+</div>
+
+<!-- ============ 3 分阶段计划与里程碑 ============ -->
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">3</span><h2>分阶段开发计划与里程碑</h2></div>
+    <p class="lead">工期以 1 名全职开发为估算基准，范围收敛后整体约 18–20 周。周数为排程参考，需以阶段 0 技术验证结果实测校准。</p>
+
+    <div class="phase">
+      <div class="badge"><div class="pn">阶段 0</div><div class="pw">约 1 周</div></div>
+      <div class="pb">
+        <div class="pt">决策冻结与技术验证（Pre-MVP）</div>
+        <div class="pd">决策已全部确认，本阶段聚焦验证 <b>Windows 全屏捕获 + H.264 硬件编码</b> 单一链路可行性，定义可量化验收基线。出口条件：最小链路跑通。</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="badge"><div class="pn">阶段 1</div><div class="pw">约 4–5 周</div></div>
+      <div class="pb">
+        <div class="pt">MVP 最小可用版本</div>
+        <div class="pd"><b>全屏捕获（1080p/30fps）+ 录制控制闭环 + 三项鼠标效果 + H.264/MP4 导出 + 基础回放 + 悬浮控制条。</b>验收点：录一段操作流程 → 保存为通用 MP4 → 回放确认，端到端无阻断缺陷。</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="badge"><div class="pn">阶段 2</div><div class="pw">约 8 周</div></div>
+      <div class="pb">
+        <div class="pt">功能增强</div>
+        <div class="pd"><b>音频采集与混录、音画同步、窗口/区域录制、按键提示、参数配置。</b>验收点：音画同步偏差在可接受阈值内，多模式录制稳定，配置生效。</div>
+      </div>
+    </div>
+    <div class="phase">
+      <div class="badge"><div class="pn">阶段 3</div><div class="pw">约 5–6 周</div></div>
+      <div class="pb">
+        <div class="pt">体验优化与分发</div>
+        <div class="pd"><b>多屏录制、性能与内存优化、跨机型兼容性、最简交付包。</b>安装器与分发作为可选扩展（待"好用"后确认）。验收点：目标机型矩阵通过兼容性与性能测试。</div>
+      </div>
+    </div>
+
+    <figure>
+      <svg viewBox="0 0 680 268" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="四阶段里程碑路线图">
+        <line x1="40" y1="56" x2="640" y2="56" stroke="#B4B2A9" stroke-width="1.5"/>
+        <g font-size="12" font-weight="700" fill="#1F3A5F" text-anchor="middle">
+          <text x="109" y="40">M0</text><text x="263" y="40">M1</text><text x="417" y="40">M2</text><text x="571" y="40">M3</text>
+        </g>
+        <g fill="#2E5C8A" stroke="#fff" stroke-width="1">
+          <circle cx="109" cy="56" r="6"/><circle cx="263" cy="56" r="6"/>
+        </g>
+        <g fill="#22704A" stroke="#fff" stroke-width="1">
+          <circle cx="417" cy="56" r="6"/><circle cx="571" cy="56" r="6"/>
+        </g>
+        <g stroke-width="1.5"><line x1="109" y1="62" x2="109" y2="72" stroke="#2E5C8A"/><line x1="263" y1="62" x2="263" y2="72" stroke="#2E5C8A"/><line x1="417" y1="62" x2="417" y2="72" stroke="#22704A"/><line x1="571" y1="62" x2="571" y2="72" stroke="#22704A"/></g>
+
+        <g font-family="sans-serif">
+          <rect x="40" y="72" width="138" height="176" rx="10" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+          <rect x="40" y="72" width="138" height="6" rx="3" fill="#2E5C8A"/>
+          <text x="109" y="98" text-anchor="middle" font-size="12" fill="#2E5C8A">阶段 0</text>
+          <text x="109" y="118" text-anchor="middle" font-size="14" font-weight="700" fill="#1F3A5F">决策冻结</text>
+          <text x="109" y="140" text-anchor="middle" font-size="12" fill="#4C5B6E">约 1 周</text>
+          <text x="54" y="176" font-size="12" fill="#1F3A5F">· 确认关键决策</text><text x="54" y="200" font-size="12" fill="#1F3A5F">· 捕获编码验证</text><text x="54" y="224" font-size="12" fill="#1F3A5F">· 定义验收基线</text>
+
+          <rect x="194" y="72" width="138" height="176" rx="10" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+          <rect x="194" y="72" width="138" height="6" rx="3" fill="#2E5C8A"/>
+          <text x="263" y="98" text-anchor="middle" font-size="12" fill="#2E5C8A">阶段 1</text>
+          <text x="263" y="118" text-anchor="middle" font-size="14" font-weight="700" fill="#1F3A5F">MVP</text>
+          <text x="263" y="140" text-anchor="middle" font-size="12" fill="#4C5B6E">约 4–5 周</text>
+          <text x="208" y="176" font-size="12" fill="#1F3A5F">· 全屏捕获</text><text x="208" y="200" font-size="12" fill="#1F3A5F">· 录制控制闭环</text><text x="208" y="224" font-size="12" fill="#1F3A5F">· 三项鼠标效果</text><text x="208" y="248" font-size="12" fill="#1F3A5F">· MP4 导出回放</text>
+
+          <rect x="348" y="72" width="138" height="176" rx="10" fill="#EAF4EF" stroke="#22704A" stroke-width="0.5"/>
+          <rect x="348" y="72" width="138" height="6" rx="3" fill="#22704A"/>
+          <text x="417" y="98" text-anchor="middle" font-size="12" fill="#22704A">阶段 2</text>
+          <text x="417" y="118" text-anchor="middle" font-size="14" font-weight="700" fill="#1F3A5F">功能增强</text>
+          <text x="417" y="140" text-anchor="middle" font-size="12" fill="#4C5B6E">约 8 周</text>
+          <text x="362" y="176" font-size="12" fill="#1F3A5F">· 音频与混录</text><text x="362" y="200" font-size="12" fill="#1F3A5F">· 音画同步</text><text x="362" y="224" font-size="12" fill="#1F3A5F">· 窗口/区域录制</text><text x="362" y="248" font-size="12" fill="#1F3A5F">· 按键提示配置</text>
+
+          <rect x="502" y="72" width="138" height="176" rx="10" fill="#EAF4EF" stroke="#22704A" stroke-width="0.5"/>
+          <rect x="502" y="72" width="138" height="6" rx="3" fill="#22704A"/>
+          <text x="571" y="98" text-anchor="middle" font-size="12" fill="#22704A">阶段 3</text>
+          <text x="571" y="118" text-anchor="middle" font-size="14" font-weight="700" fill="#1F3A5F">优化分发</text>
+          <text x="571" y="140" text-anchor="middle" font-size="12" fill="#4C5B6E">约 5–6 周</text>
+          <text x="516" y="176" font-size="12" fill="#1F3A5F">· 多屏与性能</text><text x="516" y="200" font-size="12" fill="#1F3A5F">· 兼容性测试</text><text x="516" y="224" font-size="12" fill="#1F3A5F">· 最简交付包</text><text x="516" y="248" font-size="12" fill="#1F3A5F">· 分发（可选）</text>
+        </g>
+      </svg>
+      <figcaption>图 2 · 四阶段里程碑路线图</figcaption>
+    </figure>
+  </section>
+  <div class="footer"><span>桌面电脑录屏软件 · 开发规划</span><span>3 / 分阶段计划与里程碑</span></div>
+</div>
+
+<!-- ============ 4 优先级与范围 ============ -->
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">4</span><h2>功能优先级与范围边界</h2></div>
+    <p class="lead">优先级定义：<span class="tag t-p0">P0</span> MVP 必须 · <span class="tag t-p1">P1</span> 后续增强 · <span class="tag t-p2">P2</span> 可选扩展。</p>
+
+    <table class="dt">
+      <thead><tr><th style="width:12%">优先级</th><th style="width:58%">功能项</th><th>归属阶段</th></tr></thead>
+      <tbody>
+        <tr><td class="c"><span class="tag t-p0">P0</span></td><td>全屏捕获、开始/暂停/停止/保存、回放、点击涟漪+光标高亮+鼠标轨迹、H.264/MP4 导出、悬浮控制条</td><td>阶段 1</td></tr>
+        <tr><td class="c"><span class="tag t-p1">P1</span></td><td>系统音+麦克风录制、音画同步、窗口/区域录制、按键提示、清晰度/码率参数配置</td><td>阶段 2</td></tr>
+        <tr><td class="c"><span class="tag t-p2">P2</span></td><td>多屏录制、性能与兼容性优化、H.265、安装器与分发、崩溃上报</td><td>阶段 3</td></tr>
+      </tbody>
+    </table>
+
+    <figure>
+      <svg viewBox="0 0 680 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="冻结后功能范围对比">
+        <text x="40" y="30" font-size="15" font-weight="700" fill="#1F3A5F">冻结后的功能范围</text>
+        <rect x="40" y="46" width="288" height="306" rx="12" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+        <text x="60" y="72" font-size="14" font-weight="700" fill="#1F3A5F">MVP · 阶段 1 纳入</text>
+        <text x="60" y="90" font-size="12" fill="#2E5C8A">P0 必须，录制闭环 + 鼠标效果</text>
+        <g font-size="13" fill="#1F3A5F">
+          <rect x="60" y="102" width="248" height="28" rx="6" fill="#fff" stroke="#B5CFE6" stroke-width="0.5"/><text x="72" y="120">全屏捕获 · 1080p/30fps</text>
+          <rect x="60" y="136" width="248" height="28" rx="6" fill="#fff" stroke="#B5CFE6" stroke-width="0.5"/><text x="72" y="154">开始/暂停/停止/保存/回放</text>
+          <rect x="60" y="170" width="248" height="28" rx="6" fill="#fff" stroke="#B5CFE6" stroke-width="0.5"/><text x="72" y="188">点击涟漪 + 光标高亮 + 轨迹</text>
+          <rect x="60" y="204" width="248" height="28" rx="6" fill="#fff" stroke="#B5CFE6" stroke-width="0.5"/><text x="72" y="222">H.264 / MP4 · 流畅优先</text>
+          <rect x="60" y="238" width="248" height="28" rx="6" fill="#fff" stroke="#B5CFE6" stroke-width="0.5"/><text x="72" y="256">悬浮控制条</text>
+          <rect x="60" y="272" width="248" height="28" rx="6" fill="#fff" stroke="#B5CFE6" stroke-width="0.5"/><text x="72" y="290">不录声音 · 不设时长上限</text>
+        </g>
+        <rect x="352" y="46" width="288" height="306" rx="12" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+        <text x="372" y="72" font-size="14" font-weight="700" fill="#1F3A5F">后续增强 · 阶段 2–3</text>
+        <text x="372" y="90" font-size="12" fill="#7A8798">P1/P2，按优先级逐步纳入</text>
+        <g font-size="13" fill="#1F3A5F">
+          <rect x="372" y="102" width="248" height="28" rx="6" fill="#fff" stroke="#D3D1C7" stroke-width="0.5"/><text x="384" y="120">系统音 + 麦克风录制</text>
+          <rect x="372" y="136" width="248" height="28" rx="6" fill="#fff" stroke="#D3D1C7" stroke-width="0.5"/><text x="384" y="154">音画同步</text>
+          <rect x="372" y="170" width="248" height="28" rx="6" fill="#fff" stroke="#D3D1C7" stroke-width="0.5"/><text x="384" y="188">窗口 / 区域 / 多屏录制</text>
+          <rect x="372" y="204" width="248" height="28" rx="6" fill="#fff" stroke="#D3D1C7" stroke-width="0.5"/><text x="384" y="222">按键提示</text>
+          <rect x="372" y="238" width="248" height="28" rx="6" fill="#fff" stroke="#D3D1C7" stroke-width="0.5"/><text x="384" y="256">参数配置 · 性能兼容优化</text>
+          <rect x="372" y="272" width="248" height="28" rx="6" fill="#fff" stroke="#D3D1C7" stroke-width="0.5"/><text x="384" y="290">安装器与分发（可选）</text>
+        </g>
+      </svg>
+      <figcaption>图 3 · 冻结后的 MVP 与后续功能范围边界</figcaption>
+    </figure>
+  </section>
+  <div class="footer"><span>桌面电脑录屏软件 · 开发规划</span><span>4 / 功能优先级与范围</span></div>
+</div>
+
+<!-- ============ 5 测试重点 ============ -->
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">5</span><h2>测试重点</h2></div>
+    <p class="lead">按阶段递进，MVP 阶段先守住"录制闭环"这条主线，音画相关测试随阶段 2 音频模块纳入后展开。</p>
+
+    <table class="dt">
+      <thead><tr><th style="width:20%">测试类别</th><th style="width:58%">重点内容</th><th>阶段</th></tr></thead>
+      <tbody>
+        <tr><td>功能闭环</td><td>开始/暂停/停止/保存状态切换正确，暂停不丢帧、停止可落盘</td><td><span class="tag t-p0">阶段 1</span></td></tr>
+        <tr><td>输出兼容</td><td>导出 MP4 在 Windows 内置播放器、主流手机、网页均可正常播放</td><td><span class="tag t-p0">阶段 1</span></td></tr>
+        <tr><td>鼠标效果</td><td>涟漪/高亮/轨迹与光标位置对齐，轨迹绘制不明显拖累帧率</td><td><span class="tag t-p0">阶段 1</span></td></tr>
+        <tr><td>性能</td><td>录制期间 CPU/GPU 占用、帧率稳定性、长时间录制内存无泄漏</td><td><span class="tag t-p0">阶段 1 起</span></td></tr>
+        <tr><td>音画同步</td><td>系统音与麦克风混录后，音画时间戳偏差在可接受阈值内</td><td><span class="tag t-p1">阶段 2</span></td></tr>
+        <tr><td>兼容性</td><td>不同分辨率、多显示器、不同 Windows 版本与显卡环境</td><td><span class="tag t-p1">阶段 2–3</span></td></tr>
+        <tr><td>异常场景</td><td>录制中切换窗口、弹窗、休眠恢复，文件不损坏</td><td>全阶段</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <div class="sec-h"><span class="num">6</span><h2>潜在风险与应对</h2></div>
+    <table class="dt">
+      <thead><tr><th style="width:26%">风险</th><th style="width:10%">影响</th><th>应对方式</th></tr></thead>
+      <tbody>
+        <tr><td>全屏捕获在部分显卡/全屏应用下黑屏或掉帧</td><td class="c">高</td><td>阶段 0 先做技术验证；准备捕获方案备选（硬件加速捕获回退到 GDI/BitBlt）</td></tr>
+        <tr><td>硬件编码不受支持或质量不佳</td><td class="c">中</td><td>设置软编码回退路径，画质与性能可配置权衡</td></tr>
+        <tr><td>鼠标轨迹逐帧绘制影响帧率（新增风险）</td><td class="c">中</td><td>限制轨迹长度与采样频率，阶段 1 专项测试帧率</td></tr>
+        <tr><td>音画不同步（阶段 2 起）</td><td class="c">中</td><td>统一时间基准，混录前对齐采样时钟，阶段 2 专项测试</td></tr>
+        <tr><td>不设时长上限导致磁盘占满或文件损坏</td><td class="c">中</td><td>虽按决策不设硬上限，仍建议加入磁盘空间预警提示</td></tr>
+        <tr><td>MP4 在个别设备播放兼容问题</td><td class="c">低</td><td>固定使用 H.264 + MP4 通用组合，避免冷门编码</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <b>收尾决策提示：</b>队列中最需要你在后续确认的仅有阶段 3 的交付形式（绿色免安装版 / 安装器）与内部分发方案。决策 1–11 已冻结，不阻塞阶段 0–2 推进。
+    </div>
+  </section>
+  <div class="footer"><span>桌面电脑录屏软件 · 开发规划</span><span>5–6 / 测试与风险</span></div>
+</div>
+
+</body>
+</html>

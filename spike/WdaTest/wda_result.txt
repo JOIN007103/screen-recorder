@@ -1,0 +1,22 @@
+﻿=== SetWindowDisplayAffinity vs GDI BitBlt 实测 ===
+系统: 10.0.19045.0  屏幕: 1920x1080
+测试窗口区域: (1100,380) 400x300
+
+窗口句柄: 0x1C242C
+[对照 WDA_NONE(0x00)] 期望: 抓得到（品红占比应 >90%）
+  SetWindowDisplayAffinity 返回 TRUE
+  采样 120000 像素 → 品红 100.0%   近黑 0.0%
+  ✓ 对照组有效：抓得到窗口内容
+
+[WDA_EXCLUDEFROMCAPTURE(0x11)] 期望: 抓不到（品红占比应 ≈0%）
+  SetWindowDisplayAffinity 返回 TRUE
+  采样 120000 像素 → 品红 0.4%   近黑 0.6%
+  ✓ 已被排除出捕获
+
+[WDA_MONITOR(0x01)] 期望: 抓成黑色（品红≈0%，黑色占比高）
+  SetWindowDisplayAffinity 返回 TRUE
+  采样 120000 像素 → 品红 0.4%   近黑 0.6%
+
+
+--- 判定 ---
+PASS: WDA_EXCLUDEFROMCAPTURE 对 BitBlt 生效 → 悬浮条加一条 P/Invoke 即可

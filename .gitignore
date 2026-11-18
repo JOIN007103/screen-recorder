@@ -1,0 +1,50 @@
+# ============================================================
+# 屏幕录制工具 · 同步 / GitHub 上传忽略规则
+# 目的：换电脑同步与上传仓库时只带"源码 + 文档 + 获取脚本"，
+#       不带个人数据、编译垃圾与超 GitHub 100MB 限制的大文件。
+# 注意：ffmpeg.exe 是产品必需文件，由 fetch-ffmpeg.ps1 现场下载。
+# ============================================================
+
+# ---- 大体积二进制：GitHub 单文件上限 100MB，必须现场下载 ----
+ScreenRecorder/tools/ffmpeg.exe
+spike/*.exe
+spike/S4/first_frame.png
+
+# ---- 内部工作日志（含本机硬件信息与决策过程，不随源码分发）----
+.workbuddy/
+
+# ---- 编译产物（在另一台电脑重新生成即可，跨机拷贝还会带来路径残留）----
+**/bin/
+**/obj/
+**/.vs/
+*.user
+*.suo
+
+# ---- 个人数据与运行产物（严禁同步：含个人路径、试录视频、日志）----
+settings.json
+**/settings.json
+logs/
+**/logs/
+Videos/
+**/Videos/
+*.mp4
+*.wav
+*.raw
+*.gray
+*.bak
+*.log
+
+# ---- 发布产物（由 build-package.ps1 现场生成，不必同步）----
+publish/
+
+# ---- spike 里的大体积临时文件（只保留源码与验证报告）----
+spike/ffmpeg6/
+spike/ffmpeg_new/
+spike/ffmpeg6_mirror.7z
+spike/ffmpeg-6.0-full_build.7z
+spike/*.mp4
+
+# ---- 系统文件 ----
+Thumbs.db
+desktop.ini
+.DS_Store

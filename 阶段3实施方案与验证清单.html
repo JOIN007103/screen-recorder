@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阶段3实施方案与验证清单</title>
+<style>
+  :root{
+    --navy:#1F3A5F; --navy-d:#162C49; --blue:#2E5C8A; --accent:#C8A24B;
+    --ink:#243040; --ink-2:#4C5B6E; --ink-3:#7A8798;
+    --line:#D8E0E8; --line-2:#E8EEF4; --bg:#F4F6F9; --panel:#fff;
+    --blue-bg:#EAF1F8; --amber-bg:#FBF5E6; --green-bg:#EAF4EF;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif;
+    font-size:14px;line-height:1.75;-webkit-font-smoothing:antialiased;}
+  .page{width:210mm;min-height:297mm;margin:24px auto;background:var(--panel);
+    box-shadow:0 2px 18px rgba(31,58,95,.10);padding:20mm 18mm;}
+  .cover{border-top:6px solid var(--navy);padding-top:26mm;}
+  .cover .eyebrow{color:var(--accent);font-weight:700;letter-spacing:3px;font-size:13px;}
+  .cover h1{font-size:34px;line-height:1.35;color:var(--navy-d);margin:14px 0 6px;font-weight:800;}
+  .cover .sub{font-size:17px;color:var(--blue);font-weight:600;margin-bottom:40px;}
+  .cover .rule{width:64px;height:4px;background:var(--accent);margin-bottom:34px;}
+  .meta{width:100%;border-collapse:collapse;margin-top:20px;}
+  .meta td{padding:9px 0;border-bottom:1px solid var(--line-2);font-size:14px;}
+  .meta td.k{width:120px;color:var(--ink-3);font-weight:600;}
+  .meta td.v{color:var(--ink);font-weight:600;}
+  .cover .note{margin-top:40px;padding:16px 20px;background:var(--blue-bg);
+    border-left:4px solid var(--blue);color:var(--ink-2);font-size:13px;border-radius:0 6px 6px 0;}
+  section{margin-top:14mm;}
+  .sec-h{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--navy);
+    padding-bottom:9px;margin-bottom:18px;}
+  .sec-h .num{background:var(--navy);color:#fff;width:30px;height:30px;border-radius:5px;
+    display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex:0 0 auto;}
+  .sec-h h2{font-size:21px;color:var(--navy-d);margin:0;font-weight:800;}
+  h3{font-size:16px;color:var(--navy);margin:24px 0 10px;font-weight:700;padding-left:11px;border-left:3px solid var(--accent);}
+  p{margin:8px 0;}
+  .lead{color:var(--ink-2);font-size:13.5px;}
+  table.dt{width:100%;border-collapse:collapse;margin:12px 0 6px;font-size:13px;}
+  table.dt th{background:var(--navy);color:#fff;font-weight:600;text-align:left;padding:10px 12px;border:1px solid var(--navy-d);}
+  table.dt td{padding:9px 12px;border:1px solid var(--line);vertical-align:top;}
+  table.dt tr:nth-child(even) td{background:#F8FAFC;}
+  table.dt td.c{text-align:center;}
+  .tag{display:inline-block;padding:1px 9px;border-radius:11px;font-size:12px;font-weight:700;white-space:nowrap;}
+  .t-wp{background:var(--blue-bg);color:var(--blue);}
+  .t-ok{background:var(--green-bg);color:#22704A;}
+  .t-warn{background:var(--amber-bg);color:#8A6A18;}
+  .callout{background:var(--amber-bg);border:1px solid #EBD9A6;border-left:4px solid var(--accent);
+    border-radius:0 6px 6px 0;padding:13px 17px;margin:14px 0;font-size:13px;color:#6B5620;}
+  .callout b{color:#4E3D12;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:14px 0;}
+  .card{border:1px solid var(--line);border-radius:8px;padding:15px 17px;background:#fff;}
+  .card .ct{font-weight:700;color:var(--navy);font-size:15px;margin-bottom:7px;}
+  .card ul{margin:6px 0 0;padding-left:18px;}
+  .card li{margin:4px 0;color:var(--ink-2);font-size:13px;}
+  figure{margin:16px 0;}
+  figure svg{width:100%;height:auto;display:block;}
+  figcaption{text-align:center;color:var(--ink-3);font-size:12px;margin-top:8px;}
+  .footer{margin-top:16mm;padding-top:14px;border-top:1px solid var(--line);
+    display:flex;justify-content:space-between;color:var(--ink-3);font-size:12px;}
+  .wp{border:1px solid var(--line);border-radius:8px;padding:14px 17px;margin:12px 0;background:#fff;}
+  .wp .h{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .wp .h .id{background:var(--navy);color:#fff;border-radius:5px;padding:2px 9px;font-size:12px;font-weight:700;}
+  .wp .h .tt{font-weight:700;color:var(--navy-d);font-size:15px;}
+  .wp .row{font-size:13px;margin:4px 0;color:var(--ink-2);}
+  .wp .row b{color:var(--ink);}
+  @page{size:A4;margin:0;}
+  @media print{
+    body{background:#fff;}
+    .page{margin:0;box-shadow:none;width:210mm;min-height:297mm;padding:18mm 16mm;}
+    section,.wp,table.dt,figure,.card{break-inside:avoid;}
+    .sec-h{break-after:avoid;}
+    .cover{break-after:page;}
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="cover">
+    <div class="eyebrow">PHASE 3 · IMPLEMENTATION PLAN</div>
+    <h1>阶段 3 实施方案<br>与验证清单</h1>
+    <div class="sub">多屏录制 · 性能与内存优化 · 跨机型兼容 · 最简交付包</div>
+    <div class="rule"></div>
+    <table class="meta">
+      <tr><td class="k">所属规划</td><td class="v">桌面电脑录屏软件开发规划 V1.0</td></tr>
+      <tr><td class="k">文档定位</td><td class="v">规划细化层，不含代码实现</td></tr>
+      <tr><td class="k">采用方案</td><td class="v">绿色免安装版（解压即用），预留分发扩展</td></tr>
+      <tr><td class="k">阶段工期</td><td class="v">约 5–6 周（含 2 周缓冲）</td></tr>
+      <tr><td class="k">前置依赖</td><td class="v">阶段 1 MVP、阶段 2 功能增强</td></tr>
+      <tr><td class="k">编制日期</td><td class="v">2026-11-17</td></tr>
+    </table>
+    <div class="note">
+      <b>执行边界说明：</b>本阶段方案在规划框架内细化，落实为可执行的工作包、验收标准与验证清单，不改变"暂不需要代码实现"的前文约束。文中所有"验证"指规划阶段的方案验证与验证用例设计（状态为规划态），待对应代码完成后按清单执行。
+    </div>
+  </div>
+  <div class="footer"><span>阶段3实施方案与验证清单</span><span>V1.0</span></div>
+</div>
+
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">1</span><h2>阶段目标、采用方案与范围边界</h2></div>
+    <p class="lead">阶段 3 是规划的收尾阶段，目标是把前两阶段的成果打磨为"跨机型稳定、可直接交付"的产品形态。本阶段落实老大指定的<strong>建议方案</strong>，并关闭规划中最后一项待确认事项。</p>
+
+    <h3>1.1 采用方案（已确定，关闭待确认项）</h3>
+    <table class="dt">
+      <thead><tr><th style="width:22%">决策事项</th><th style="width:34%">采用方案</th><th>落实说明</th></tr></thead>
+      <tbody>
+        <tr><td>交付形态</td><td><b>绿色免安装版（解压即用）</b></td><td>交付一个目录，含主程序、依赖、配置与使用说明；无需安装、不写注册表，删除目录即完成卸载</td></tr>
+        <tr><td>安装器</td><td>本阶段不实现</td><td>列为可选扩展；若后续转内部分发再补打包</td></tr>
+        <tr><td>授权机制</td><td>本阶段不实现</td><td>个人自用阶段无需授权</td></tr>
+        <tr><td>崩溃上报</td><td>降级为本地日志</td><td>仅本地记录，不外发，避免隐私与依赖问题</td></tr>
+        <tr><td>更新提示</td><td>轻量版本号展示</td><td>"关于"界面显示版本号，不做强制在线更新</td></tr>
+      </tbody>
+    </table>
+
+    <h3>1.2 范围边界（与前文目标一致性）</h3>
+    <div class="grid2">
+      <div class="card">
+        <div class="ct">本阶段纳入</div>
+        <ul>
+          <li>多屏录制（单屏选择 / 全屏拼接）</li>
+          <li>性能与内存优化、长时间录制稳定性</li>
+          <li>跨机型兼容性建设与回退路径</li>
+          <li>最简交付包与使用说明</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="ct">本阶段不纳入</div>
+        <ul>
+          <li>代码实现（前文明确暂不需要）</li>
+          <li>视频剪辑（决策已排除）</li>
+          <li>声音录制的新增（阶段 2 已规划）</li>
+          <li>安装器、授权、在线更新</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>1.3 前置依赖核对</h3>
+    <p class="lead">阶段 3 的四个工作包均以前置阶段的模块为输入。下表确认依赖关系，避免"空中楼阁"式细化：</p>
+    <table class="dt">
+      <thead><tr><th style="width:26%">阶段 3 工作包</th><th>依赖的前置产物</th><th style="width:14%">来源阶段</th></tr></thead>
+      <tbody>
+        <tr><td>多屏录制</td><td>屏幕捕获模块、录制状态机、区域选择逻辑</td><td>阶段 1 / 2</td></tr>
+        <tr><td>性能与内存优化</td><td>采集-编码全链路、鼠标轨迹效果实现</td><td>阶段 1</td></tr>
+        <tr><td>跨机型兼容性</td><td>捕获方案、编码方案（含回退路径）</td><td>阶段 1 / 2</td></tr>
+        <tr><td>最简交付包</td><td>上述三项主体功能冻结</td><td>本阶段</td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>依赖风险提示：</b>阶段 3 的所有工作包都建立在阶段 1、2 已完成的基础上。当前阶段 1、2 尚无实现，因此本方案为"规划态"细化；一旦进入实际开发，须严格按阶段 0→1→2→3 顺序推进，不可跳阶段实施。</div>
+  </section>
+  <div class="footer"><span>阶段3实施方案与验证清单</span><span>1 / 目标与范围</span></div>
+</div>
+
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">2</span><h2>工作包拆解与验收标准</h2></div>
+    <p class="lead">阶段 3 拆为 4 个工作包（WP3.1–WP3.4），每个工作包给出任务、依赖、工时估算与验收标准。工时以 1 名全职开发为基准。</p>
+
+    <div class="wp">
+      <div class="h"><span class="id">WP3.1</span><span class="tt">多屏录制</span><span class="tag t-wp">约 8 人日</span></div>
+      <div class="row"><b>任务：</b>① 枚举显示器并建立虚拟桌面坐标映射；② 实现"单屏选择"与"全屏拼接"两种模式；③ 录制区域坐标在拼接画面中的统一转换；④ 跨屏鼠标点击位置的正确定位；⑤ 配置界面增加多屏选项与预览。</div>
+      <div class="row"><b>依赖：</b>阶段 1 屏幕捕获模块、阶段 2 区域选择逻辑。</div>
+      <div class="row"><b>验收标准：</b>双屏环境下可选单屏或拼接录制；鼠标点击提示在拼接画面中位置正确、无明显偏移；切换录制模式不中断当前会话。</div>
+    </div>
+
+    <div class="wp">
+      <div class="h"><span class="id">WP3.2</span><span class="tt">性能与内存优化</span><span class="tag t-wp">约 8 人日</span></div>
+      <div class="row"><b>任务：</b>① 采集-编码流水线缓冲策略优化；② 长时间录制内存泄漏排查与修复；③ 鼠标轨迹渲染开销优化（前文识别的新风险点）；④ "流畅优先"编码档位固化；⑤ CPU/GPU 占用基线测量与记录。</div>
+      <div class="row"><b>依赖：</b>阶段 1 全链路实现、三项鼠标效果实现。</div>
+      <div class="row"><b>验收标准：</b>连续录制 2 小时内存无持续增长；1080p/30fps 下 CPU 占用满足"流畅优先"基线；开启鼠标轨迹后帧率波动在可接受阈值内。</div>
+    </div>
+
+    <div class="wp">
+      <div class="h"><span class="id">WP3.3</span><span class="tt">跨机型兼容性</span><span class="tag t-wp">约 6 人日</span></div>
+      <div class="row"><b>任务：</b>① 建立目标机型矩阵（集显 / 独显 / 不同分辨率 / 不同 DPI / 不同 Windows 版本）；② 捕获方案回退路径（硬件加速失败回退到 GDI/BitBlt）；③ H.264 硬件编码不可用时回退软编码；④ 兼容性回归测试与问题闭环。</div>
+      <div class="row"><b>依赖：</b>WP3.1、WP3.2 主体完成。</div>
+      <div class="row"><b>验收标准：</b>机型矩阵全部通过冒烟测试；黑屏或掉帧场景有回退路径且仍可完成录制；回退触发后用户有明确提示。</div>
+    </div>
+
+    <div class="wp">
+      <div class="h"><span class="id">WP3.4</span><span class="tt">最简交付包</span><span class="tag t-wp">约 5 人日</span></div>
+      <div class="row"><b>任务：</b>① 绿色版目录结构（主程序 + 依赖 + 配置 + 说明）；② 首次运行的配置初始化；③ 无注册表残留的"删除即卸载"；④ 使用说明（录制—保存—回放操作步骤）；⑤ 版本号展示与本地日志。</div>
+      <div class="row"><b>依赖：</b>WP3.1–WP3.3 主体功能冻结。</div>
+      <div class="row"><b>验收标准：</b>解压到任意目录可直接运行；删除目录后系统无残留；新用户按说明可独立完成"录制—保存—回放"全流程。</div>
+    </div>
+
+    <p class="lead"><b>工时小计：</b>约 27 人日（约 5.4 周）。结合阶段 0–2 的并行验证与缓冲，阶段 3 整体按 5–6 周安排，与前规划一致。</p>
+  </section>
+  <div class="footer"><span>阶段3实施方案与验证清单</span><span>2 / 工作包拆解</span></div>
+</div>
+
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">3</span><h2>阶段 3 内部里程碑安排</h2></div>
+    <figure>
+      <svg viewBox="0 0 680 372" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="阶段3内部工作包时间线">
+        <text x="40" y="30" font-size="15" font-weight="700" fill="#1F3A5F">阶段 3 内部工作包时间线（相对周）</text>
+        <g font-size="12" fill="#7A8798"><text x="150" y="62">W15</text><text x="280" y="62">W16</text><text x="410" y="62">W17</text><text x="540" y="62">W18</text><text x="640" y="62">W19–20</text></g>
+        <g stroke="#E8EEF4" stroke-width="1">
+          <line x1="150" y1="70" x2="150" y2="300"/><line x1="280" y1="70" x2="280" y2="300"/>
+          <line x1="410" y1="70" x2="410" y2="300"/><line x1="540" y1="70" x2="540" y2="300"/><line x1="640" y1="70" x2="640" y2="300"/>
+        </g>
+        <g font-size="13" fill="#1F3A5F">
+          <text x="46" y="110">WP3.1 多屏录制</text>
+          <rect x="150" y="94" width="130" height="26" rx="5" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+          <text x="46" y="160">WP3.2 性能优化</text>
+          <rect x="150" y="144" width="180" height="26" rx="5" fill="#EAF1F8" stroke="#2E5C8A" stroke-width="0.5"/>
+          <text x="46" y="210">WP3.3 兼容性</text>
+          <rect x="280" y="194" width="180" height="26" rx="5" fill="#EAF4EF" stroke="#22704A" stroke-width="0.5"/>
+          <text x="46" y="260">WP3.4 交付包</text>
+          <rect x="410" y="244" width="130" height="26" rx="5" fill="#EAF4EF" stroke="#22704A" stroke-width="0.5"/>
+        </g>
+        <rect x="540" y="294" width="100" height="26" rx="5" fill="#FBF5E6" stroke="#C8A24B" stroke-width="0.5"/>
+        <text x="590" y="311" text-anchor="middle" font-size="12" fill="#8A6A18">缓冲 / 验收</text>
+        <text x="40" y="352" font-size="12" fill="#7A8798">说明：W15–W18 为工作包主执行期，W19–W20 为验收与缓冲期；阶段 3 合计约 5–6 周。</text>
+      </svg>
+      <figcaption>图 1 · 阶段 3 内部工作包相对时间线</figcaption>
+    </figure>
+
+    <table class="dt">
+      <thead><tr><th style="width:16%">节点</th><th style="width:20%">时间</th><th>交付 / 出口条件</th></tr></thead>
+      <tbody>
+        <tr><td>M3.1</td><td>W16 末</td><td>多屏录制与性能优化主体完成，进入兼容性测试</td></tr>
+        <tr><td>M3.2</td><td>W17 末</td><td>机型矩阵兼容通过，回退路径可用；主体功能冻结</td></tr>
+        <tr><td>M3.3</td><td>W18 末</td><td>最简交付包成型，新用户可完成录制—保存—回放</td></tr>
+        <tr><td>M3.4</td><td>W19–20</td><td>验收测试、文档收尾，阶段 3 关闭</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <div class="footer"><span>阶段3实施方案与验证清单</span><span>3 / 内部里程碑</span></div>
+</div>
+
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">4</span><h2>必要验证（规划态验证清单）</h2></div>
+    <p class="lead">本清单用于验证阶段 3 方案本身的完备性与可执行性，状态为"规划态"。待对应实现完成后，按"验证用例设计"逐项执行。</p>
+
+    <h3>4.1 方案验证清单</h3>
+    <table class="dt">
+      <thead><tr><th style="width:8%">编号</th><th style="width:22%">验证项</th><th style="width:36%">验证方法</th><th>通过标准</th></tr></thead>
+      <tbody>
+        <tr><td class="c">V1</td><td>目标一致性</td><td>逐条核对 11 项冻结决策与阶段 3 工作包，检查有无冲突</td><td>无冲突；不录声音、不含剪辑、不写代码三项约束均满足</td><td class="c"><span class="tag t-ok">通过</span></td></tr>
+        <tr><td class="c">V2</td><td>依赖完整性</td><td>核对每个工作包的前置模块是否在阶段 1/2 有对应任务</td><td>4/4 工作包依赖均有来源，无悬空依赖</td><td class="c"><span class="tag t-ok">通过</span></td></tr>
+        <tr><td class="c">V3</td><td>技术可行性</td><td>依据 Windows 平台通用能力评估多屏坐标映射、编码回退、DPI 感知方案</td><td>三项均有成熟技术路径，无不可实现项</td><td class="c"><span class="tag t-ok">通过</span></td></tr>
+        <tr><td class="c">V4</td><td>验收可测性</td><td>检查每个验收标准是否有明确测试方法与通过阈值</td><td>4/4 工作包验收标准可量化、可执行</td><td class="c"><span class="tag t-ok">通过</span></td></tr>
+        <tr><td class="c">V5</td><td>工期合理性</td><td>工时估算汇总与阶段工期比对</td><td>27 人日 ≈ 5.4 周，落在 5–6 周窗口内</td><td class="c"><span class="tag t-ok">通过</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>4.2 验证用例设计（待实现后执行）</h3>
+    <table class="dt">
+      <thead><tr><th style="width:10%">用例</th><th style="width:24%">场景</th><th>步骤与通过标准</th></tr></thead>
+      <tbody>
+        <tr><td class="c">TC-1</td><td>双屏拼接录制</td><td>双屏环境选择拼接模式录制 5 分钟 → 点击两屏不同位置 → 回放确认点击提示位置与实参一致，画面无偏移</td></tr>
+        <tr><td class="c">TC-2</td><td>长时间稳定性</td><td>连续录制 2 小时 → 监测内存曲线 → 无持续增长；文件可正常打开回放</td></tr>
+        <tr><td class="c">TC-3</td><td>轨迹开启帧率</td><td>开启鼠标轨迹录制 → 记录帧率 → 波动在阈值内，轨迹显示连续</td></tr>
+        <tr><td class="c">TC-4</td><td>编码回退</td><td>在硬件编码不可用机型启动录制 → 自动回退软编码 → 成功产出 MP4 且有提示</td></tr>
+        <tr><td class="c">TC-5</td><td>绿色版可用性</td><td>解压到全新目录 → 运行并完成录制—保存—回放 → 删除目录 → 系统无残留</td></tr>
+        <tr><td class="c">TC-6</td><td>输出兼容性</td><td>导出 MP4 分别在 Windows 播放器、手机、网页播放 → 均可正常解码播放</td></tr>
+      </tbody>
+    </table>
+  </section>
+  <div class="footer"><span>阶段3实施方案与验证清单</span><span>4 / 必要验证</span></div>
+</div>
+
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">5</span><h2>风险、应对与一致性核对</h2></div>
+    <h3>5.1 阶段 3 风险与应对</h3>
+    <table class="dt">
+      <thead><tr><th style="width:30%">风险</th><th style="width:10%">影响</th><th>应对方式</th></tr></thead>
+      <tbody>
+        <tr><td>多屏不同 DPI 导致坐标偏移</td><td class="c">高</td><td>统一虚拟桌面坐标并启用 DPI 感知，TC-1 专项验证</td></tr>
+        <tr><td>部分集显硬件编码不可用</td><td class="c">中</td><td>软编码回退路径，TC-4 验证</td></tr>
+        <tr><td>绿色版依赖 DLL 缺失</td><td class="c">中</td><td>建立依赖打包清单，新环境冒烟测试（TC-5）</td></tr>
+        <tr><td>长时间录制内存增长</td><td class="c">中</td><td>WP3.2 专项排查，TC-2 验证</td></tr>
+        <tr><td>鼠标轨迹性能开销</td><td class="c">中</td><td>限制采样频率与轨迹长度，TC-3 验证</td></tr>
+      </tbody>
+    </table>
+
+    <h3>5.2 与前文目标一致性核对表</h3>
+    <table class="dt">
+      <thead><tr><th style="width:34%">前文目标 / 决策</th><th style="width:40%">阶段 3 落实</th><th>结论</th></tr></thead>
+      <tbody>
+        <tr><td>暂不需要代码实现</td><td>本方案为规划细化，验证清单为规划态，未写代码</td><td class="c"><span class="tag t-ok">一致</span></td></tr>
+        <tr><td>仅 Windows 10/11</td><td>兼容性矩阵与回退路径均围绕 Windows 平台</td><td class="c"><span class="tag t-ok">一致</span></td></tr>
+        <tr><td>先个人自用，好用再分发</td><td>采用绿色免安装版，安装器/授权列为可选扩展</td><td class="c"><span class="tag t-ok">一致</span></td></tr>
+        <tr><td>不含剪辑</td><td>阶段 3 无剪辑相关功能</td><td class="c"><span class="tag t-ok">一致</span></td></tr>
+        <tr><td>不录声音（阶段 2 纳入）</td><td>阶段 3 不新增音频功能</td><td class="c"><span class="tag t-ok">一致</span></td></tr>
+        <tr><td>H.264 + MP4 / 流畅优先</td><td>编码档位固化为流畅优先，输出兼容性纳入 TC-6</td><td class="c"><span class="tag t-ok">一致</span></td></tr>
+        <tr><td>不设时长上限</td><td>阶段 3 不加硬上限；建议保留磁盘空间预警（风险项）</td><td class="c"><span class="tag t-warn">需注意</span></td></tr>
+      </tbody>
+    </table>
+    <div class="callout"><b>一致性结论：</b>阶段 3 方案与 11 项冻结决策及原始需求目标保持一致，唯一"需注意"项为磁盘空间预警——这是对"不设时长上限"决策的补充性保护建议（仅提示、不强制），需在后续开发排期时确认是否纳入。</div>
+  </section>
+  <div class="footer"><span>阶段3实施方案与验证清单</span><span>5 / 风险与一致性</span></div>
+</div>
+
+</body>
+</html>

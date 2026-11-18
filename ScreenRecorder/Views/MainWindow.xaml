@@ -1,0 +1,283 @@
+<Window x:Class="ScreenRecorder.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="屏幕录制工具" Height="620" Width="760"
+        MinHeight="560" MinWidth="680"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F6F9" FontFamily="Microsoft YaHei">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="PrimaryBrush" Color="#2C6BED"/>
+        <SolidColorBrush x:Key="DarkBrush" Color="#1F2937"/>
+        <SolidColorBrush x:Key="SubBrush" Color="#6B7280"/>
+        <SolidColorBrush x:Key="CardBrush" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="LineBrush" Color="#E5E7EB"/>
+
+        <Style x:Key="Card" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardBrush}"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="Padding" Value="18"/>
+            <Setter Property="Margin" Value="0,0,0,14"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="#D1D5DB" BlurRadius="10" ShadowDepth="1" Opacity="0.5"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="24,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#1E56D6"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Background" Value="#B8C4DA"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="22">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- 标题区 -->
+        <StackPanel Grid.Row="0" Margin="0,0,0,18">
+            <TextBlock Text="屏幕录制工具" FontSize="26" FontWeight="Bold" Foreground="{StaticResource DarkBrush}"/>
+            <TextBlock Text="记录电脑操作流程 · 全屏录制 · 鼠标点击提示 · 通用 MP4 导出" FontSize="13"
+                       Foreground="{StaticResource SubBrush}" Margin="0,6,0,0"/>
+            <TextBlock x:Name="TxtVersion" Text="版本 1.0.0" FontSize="11" Foreground="#2C6BED"
+                       Margin="0,6,0,0" Cursor="Hand" ToolTip="点击查看关于信息"
+                       MouseLeftButtonUp="TxtVersion_Click"/>
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+
+                <!-- 录制设置卡片 -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="录制设置" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource DarkBrush}" Margin="0,0,0,14"/>
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <TextBlock Text="保存位置" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
+                                       Foreground="{StaticResource DarkBrush}" Margin="0,0,0,10"/>
+                            <TextBox x:Name="TxtOutputDir" Grid.Row="0" Grid.Column="1" Height="32"
+                                     VerticalContentAlignment="Center" FontSize="13" Padding="8,0"
+                                     BorderBrush="{StaticResource LineBrush}" Margin="0,0,10,10"/>
+                            <Button x:Name="BtnBrowse" Content="浏览…" Grid.Row="0" Grid.Column="2"
+                                    Height="32" Padding="14,0" FontSize="13" Margin="0,0,0,10"
+                                    Background="#EEF2FF" Foreground="#2C6BED" BorderThickness="0"
+                                    Cursor="Hand" Click="BtnBrowse_Click"/>
+
+                            <TextBlock Text="画面参数" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
+                                       Foreground="{StaticResource DarkBrush}" Margin="0,0,0,10"/>
+                            <TextBlock x:Name="TxtScreenInfo" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"
+                                       VerticalAlignment="Center" Foreground="{StaticResource SubBrush}"
+                                       FontSize="13" Margin="0,0,0,10"/>
+
+                            <TextBlock Text="磁盘预警" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center"
+                                       Foreground="{StaticResource DarkBrush}" Margin="0,0,0,10"/>
+                            <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,0,0,10">
+                                <TextBlock Text="剩余低于" Foreground="{StaticResource SubBrush}" FontSize="13"
+                                           VerticalAlignment="Center" Margin="0,0,6,0"/>
+                                <TextBox x:Name="TxtDiskWarn" Width="70" Height="30" Text="2048"
+                                         VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                                         BorderBrush="{StaticResource LineBrush}"/>
+                                <TextBlock Text="MB 时提示（不强制停止）" Foreground="{StaticResource SubBrush}"
+                                           FontSize="13" VerticalAlignment="Center" Margin="6,0,0,0"/>
+                            </StackPanel>
+
+                            <TextBlock Text="编码方式" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"
+                                       Foreground="{StaticResource DarkBrush}" Margin="0,0,0,10"/>
+                            <StackPanel Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="0,0,0,10">
+                                <ComboBox x:Name="CmbEncoder" Width="180" Height="30" FontSize="13"
+                                          VerticalContentAlignment="Center" BorderBrush="{StaticResource LineBrush}">
+                                    <ComboBoxItem Content="自动（优先显卡硬编码）" IsSelected="True"/>
+                                    <ComboBoxItem Content="NVENC 硬编码（低 CPU 占用）"/>
+                                    <ComboBoxItem Content="libx264 软编码（兼容性最好）"/>
+                                </ComboBox>
+                                <TextBlock x:Name="TxtEncoderHint" Text="检测中…" Foreground="{StaticResource SubBrush}"
+                                           FontSize="12" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                            </StackPanel>
+
+                            <TextBlock Text="开始前倒计时" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center"
+                                       Foreground="{StaticResource DarkBrush}"/>
+                            <StackPanel Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal">
+                                <ComboBox x:Name="CmbCountdown" Width="100" Height="30" FontSize="13"
+                                          VerticalContentAlignment="Center" BorderBrush="{StaticResource LineBrush}">
+                                    <ComboBoxItem Content="关闭"/>
+                                    <ComboBoxItem Content="3 秒" IsSelected="True"/>
+                                    <ComboBoxItem Content="5 秒"/>
+                                </ComboBox>
+                                <TextBlock Text="倒计时期间不录画面，避免录进找鼠标的开头" Foreground="{StaticResource SubBrush}"
+                                           FontSize="12" VerticalAlignment="Center" Margin="10,0,0,0"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <!-- 鼠标效果卡片 -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="鼠标效果（录制时叠加到画面中）" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource DarkBrush}" Margin="0,0,0,12"/>
+                        <WrapPanel>
+                            <CheckBox x:Name="ChkRipple" Content="点击涟漪 / 光圈" IsChecked="True"
+                                      FontSize="13" Margin="0,6,28,6" Foreground="{StaticResource DarkBrush}"/>
+                            <CheckBox x:Name="ChkHighlight" Content="光标高亮" IsChecked="True"
+                                      FontSize="13" Margin="0,6,28,6" Foreground="{StaticResource DarkBrush}"/>
+                            <CheckBox x:Name="ChkTrail" Content="鼠标轨迹" IsChecked="False"
+                                      FontSize="13" Margin="0,6,28,6" Foreground="{StaticResource DarkBrush}"/>
+                        </WrapPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 音频设置卡片 -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <TextBlock Text="音频（录制到视频中，固定混音为单音轨）" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="{StaticResource DarkBrush}" Margin="0,0,0,12"/>
+                        <WrapPanel Margin="0,0,0,10">
+                            <CheckBox x:Name="ChkSystemAudio" Content="系统声音（软件提示音、视频声音）" IsChecked="True"
+                                      FontSize="13" Margin="0,6,28,6" Foreground="{StaticResource DarkBrush}"
+                                      Checked="AudioSource_Changed" Unchecked="AudioSource_Changed"/>
+                            <CheckBox x:Name="ChkMicrophone" Content="麦克风（讲解声音）" IsChecked="True"
+                                      FontSize="13" Margin="0,6,28,6" Foreground="{StaticResource DarkBrush}"
+                                      Checked="AudioSource_Changed" Unchecked="AudioSource_Changed"/>
+                        </WrapPanel>
+                        <Grid Margin="0,4,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="46"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="系统声音量" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center"
+                                       Foreground="{StaticResource DarkBrush}" FontSize="13"/>
+                            <Slider x:Name="SldSystemVol" Grid.Row="0" Grid.Column="1" Minimum="0" Maximum="2"
+                                    Value="1" SmallChange="0.1" TickFrequency="0.1" IsSnapToTickEnabled="True"
+                                    VerticalAlignment="Center" Margin="0,0,10,0" ValueChanged="SldSystemVol_ValueChanged"/>
+                            <TextBlock x:Name="TxtSystemVol" Grid.Row="0" Grid.Column="2" Text="100%"
+                                       Foreground="{StaticResource SubBrush}" FontSize="12" VerticalAlignment="Center"/>
+
+                            <TextBlock Text="麦克风云量" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"
+                                       Foreground="{StaticResource DarkBrush}" FontSize="13" Margin="0,6,0,0"/>
+                            <Slider x:Name="SldMicVol" Grid.Row="1" Grid.Column="1" Minimum="0" Maximum="2"
+                                    Value="1" SmallChange="0.1" TickFrequency="0.1" IsSnapToTickEnabled="True"
+                                    VerticalAlignment="Center" Margin="0,6,10,0" ValueChanged="SldMicVol_ValueChanged"/>
+                            <TextBlock x:Name="TxtMicVol" Grid.Row="1" Grid.Column="2" Text="100%"
+                                       Foreground="{StaticResource SubBrush}" FontSize="12" VerticalAlignment="Center" Margin="0,6,0,0"/>
+                        </Grid>
+                        <TextBlock x:Name="TxtAudioHint" Text="正在检测音频设备…" Foreground="{StaticResource SubBrush}"
+                                   FontSize="11" Margin="0,10,0,0"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- 开始按钮 + 状态 -->
+                <Border Style="{StaticResource Card}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock x:Name="TxtStatus" Text="就绪" FontSize="14" Foreground="#059669"
+                                       FontWeight="SemiBold"/>
+                            <TextBlock x:Name="TxtFfmpegStatus" Text="正在检测编码组件…" FontSize="12"
+                                       Foreground="{StaticResource SubBrush}" Margin="0,4,0,0"/>
+                            <TextBlock x:Name="TxtHotkeyHint" Text="全局热键：F9 开始/暂停/继续 · F10 停止"
+                                       FontSize="11" Foreground="{StaticResource SubBrush}" Margin="0,4,0,0"/>
+                        </StackPanel>
+                        <Button x:Name="BtnStart" Content="● 开始录制" Grid.Column="1"
+                                Style="{StaticResource PrimaryButton}" Click="BtnStart_Click" MinWidth="150"/>
+                    </Grid>
+                </Border>
+
+                <!-- 录制结果（录制结束后显示） -->
+                <Border x:Name="CardResult" Style="{StaticResource Card}" Visibility="Collapsed">
+                    <StackPanel>
+                        <TextBlock x:Name="TxtResultTitle" Text="录制已保存" FontSize="16" FontWeight="SemiBold"
+                                   Foreground="#059669" Margin="0,0,0,8"/>
+                        <TextBlock x:Name="TxtResultPath" Text="" FontSize="12"
+                                   Foreground="{StaticResource SubBrush}" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Button x:Name="BtnOpenFolder" Content="打开所在文件夹" Height="32" Padding="16,0"
+                                    FontSize="13" Background="#EEF2FF" Foreground="#2C6BED" BorderThickness="0"
+                                    Cursor="Hand" Click="BtnOpenFolder_Click" Margin="0,0,10,0"/>
+                            <Button x:Name="BtnPlayLast" Content="立即播放" Height="32" Padding="16,0"
+                                    FontSize="13" Background="#EEF2FF" Foreground="#2C6BED" BorderThickness="0"
+                                    Cursor="Hand" Click="BtnPlayLast_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- 最近录制 -->
+                <Border Style="{StaticResource Card}">
+                    <StackPanel>
+                        <Grid Margin="0,0,0,10">
+                            <TextBlock Text="最近录制" FontSize="16" FontWeight="SemiBold"
+                                       Foreground="{StaticResource DarkBrush}" VerticalAlignment="Center"/>
+                            <Button x:Name="BtnRefresh" Content="刷新" HorizontalAlignment="Right"
+                                    Background="#EEF2FF" Foreground="#2C6BED" BorderThickness="0"
+                                    Padding="12,4" FontSize="12" Cursor="Hand" Click="BtnRefresh_Click"/>
+                        </Grid>
+                        <ListBox x:Name="LstFiles" Height="130" BorderBrush="{StaticResource LineBrush}"
+                                 MouseDoubleClick="LstFiles_MouseDoubleClick">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" Margin="4">
+                                        <TextBlock Text="▶" Foreground="#2C6BED" Margin="0,0,10,0"/>
+                                        <TextBlock Text="{Binding}" Foreground="{StaticResource DarkBrush}" FontSize="13"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <TextBlock Text="双击文件可回放；也可点击下方的回放按钮" Foreground="{StaticResource SubBrush}"
+                                   FontSize="11" Margin="0,8,0,0"/>
+                    </StackPanel>
+                </Border>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Window>

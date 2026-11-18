@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>录屏软件项目 · 任务拆解 WBS</title>
+<style>
+  :root{--navy:#1F3A5F;--navy-d:#162C49;--blue:#2E5C8A;--accent:#C8A24B;--ink:#243040;--ink-2:#4C5B6E;--ink-3:#7A8798;--line:#D8E0E8;--line-2:#E8EEF4;--bg:#F4F6F9;--panel:#fff;--blue-bg:#EAF1F8;--amber-bg:#FBF5E6;--green-bg:#EAF4EF;}
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif;font-size:14px;line-height:1.75;-webkit-font-smoothing:antialiased;}
+  .page{width:210mm;min-height:297mm;margin:24px auto;background:var(--panel);box-shadow:0 2px 18px rgba(31,58,95,.10);padding:20mm 18mm;}
+  .cover{border-top:6px solid var(--navy);padding-top:26mm;}
+  .cover .eyebrow{color:var(--accent);font-weight:700;letter-spacing:3px;font-size:13px;}
+  .cover h1{font-size:34px;line-height:1.35;color:var(--navy-d);margin:14px 0 6px;font-weight:800;}
+  .cover .sub{font-size:17px;color:var(--blue);font-weight:600;margin-bottom:40px;}
+  .cover .rule{width:64px;height:4px;background:var(--accent);margin-bottom:34px;}
+  .meta{width:100%;border-collapse:collapse;margin-top:20px;}
+  .meta td{padding:9px 0;border-bottom:1px solid var(--line-2);font-size:14px;}
+  .meta td.k{width:120px;color:var(--ink-3);font-weight:600;}
+  .meta td.v{color:var(--ink);font-weight:600;}
+  .cover .note{margin-top:40px;padding:16px 20px;background:var(--blue-bg);border-left:4px solid var(--blue);color:var(--ink-2);font-size:13px;border-radius:0 6px 6px 0;}
+  section{margin-top:14mm;}
+  .sec-h{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--navy);padding-bottom:9px;margin-bottom:18px;}
+  .sec-h .num{background:var(--navy);color:#fff;width:30px;height:30px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex:0 0 auto;}
+  .sec-h h2{font-size:21px;color:var(--navy-d);margin:0;font-weight:800;}
+  h3{font-size:16px;color:var(--navy);margin:24px 0 10px;font-weight:700;padding-left:11px;border-left:3px solid var(--accent);}
+  p{margin:8px 0;}
+  .lead{color:var(--ink-2);font-size:13.5px;}
+  table.dt{width:100%;border-collapse:collapse;margin:12px 0 6px;font-size:12.5px;}
+  table.dt th{background:var(--navy);color:#fff;font-weight:600;text-align:left;padding:9px 10px;border:1px solid var(--navy-d);}
+  table.dt td{padding:8px 10px;border:1px solid var(--line);vertical-align:top;}
+  table.dt tr:nth-child(even) td{background:#F8FAFC;}
+  table.dt td.c{text-align:center;}
+  .tag{display:inline-block;padding:1px 8px;border-radius:11px;font-size:11.5px;font-weight:700;white-space:nowrap;}
+  .t-p0{background:#FCE9E7;color:#B23A32;}.t-p1{background:var(--blue-bg);color:var(--blue);}.t-p2{background:#EEF1F4;color:var(--ink-2);}
+  .t-ok{background:var(--green-bg);color:#22704A;}.t-warn{background:var(--amber-bg);color:#8A6A18;}
+  .callout{background:var(--amber-bg);border:1px solid #EBD9A6;border-left:4px solid var(--accent);border-radius:0 6px 6px 0;padding:13px 17px;margin:14px 0;font-size:13px;color:#6B5620;}
+  .callout b{color:#4E3D12;}
+  figure{margin:16px 0;}figure svg{width:100%;height:auto;display:block;}figcaption{text-align:center;color:var(--ink-3);font-size:12px;margin-top:8px;}
+  .footer{margin-top:16mm;padding-top:14px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:var(--ink-3);font-size:12px;}
+  @page{size:A4;margin:0;}
+  @media print{body{background:#fff;}.page{margin:0;box-shadow:none;width:210mm;min-height:297mm;padding:18mm 16mm;}section,table.dt,figure{break-inside:avoid;}.sec-h{break-after:avoid;}.cover{break-after:page;}}
+</style>
+</head>
+<body>
+
+<div class="page">
+  <div class="cover">
+    <div class="eyebrow">WORK BREAKDOWN STRUCTURE · 任务拆解</div>
+    <h1>桌面电脑录屏软件<br>项目任务拆解（WBS）</h1>
+    <div class="sub">阶段 0–3 全量任务 · 依赖顺序 · 工时估算</div>
+    <div class="rule"></div>
+    <table class="meta">
+      <tr><td class="k">所属规划</td><td class="v">桌面电脑录屏软件开发规划 V1.0</td></tr>
+      <tr><td class="k">文档定位</td><td class="v">规划转执行的衔接文档，不含代码实现</td></tr>
+      <tr><td class="k">工期基准</td><td class="v">1 名全职开发，约 18–20 周</td></tr>
+      <tr><td class="k">任务总数</td><td class="v">4 阶段 / 13 工作包 / 55 项任务</td></tr>
+      <tr><td class="k">编制日期</td><td class="v">2026-11-17</td></tr>
+    </table>
+    <div class="note"><b>文档说明：</b>本 WBS 将规划文档与阶段 3 实施方案拆解为可排程的任务单元，给出依赖顺序与工时估算，作为后续进入开发时的执行依据。当前仍处规划阶段，本文件不含代码实现。</div>
+  </div>
+  <div class="footer"><span>录屏软件项目 · 任务拆解 WBS</span><span>V1.0</span></div>
+</div>
+
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">1</span><h2>WBS 总览与工时汇总</h2></div>
+    <p class="lead">按阶段 → 工作包 → 任务三级拆解。工时以"人日"为单位，1 人全职基准；周数按每周 5 个工作日折算。</p>
+
+    <table class="dt">
+      <thead><tr><th style="width:10%">阶段</th><th style="width:24%">工作包</th><th style="width:12%">任务数</th><th style="width:14%">工时（人日）</th><th>关键交付</th></tr></thead>
+      <tbody>
+        <tr><td class="c">阶段 0</td><td>WP0.1 技术验证</td><td class="c">4</td><td class="c">5</td><td>捕获+编码链路跑通</td></tr>
+        <tr><td class="c" rowspan="3">阶段 1</td><td>WP1.1 界面与控制</td><td class="c">5</td><td class="c">6</td><td>主界面/悬浮条/状态机</td></tr>
+        <tr><td>WP1.2 屏幕捕获</td><td class="c">4</td><td class="c">6</td><td>全屏 1080p/30fps 采集</td></tr>
+        <tr><td>WP1.3 鼠标效果</td><td class="c">4</td><td class="c">5</td><td>涟漪/高亮/轨迹</td></tr>
+        <tr><td class="c" rowspan="3">阶段 2</td><td>WP2.1 编码与导出</td><td class="c">4</td><td class="c">5</td><td>H.264/MP4 通用导出</td></tr>
+        <tr><td>WP2.2 音频与同步</td><td class="c">5</td><td class="c">7</td><td>系统音/麦克风混录</td></tr>
+        <tr><td>WP2.3 范围与配置</td><td class="c">4</td><td class="c">6</td><td>窗口/区域/参数配置</td></tr>
+        <tr><td class="c" rowspan="4">阶段 3</td><td>WP3.1 多屏录制</td><td class="c">5</td><td class="c">8</td><td>单屏/拼接录制</td></tr>
+        <tr><td>WP3.2 性能优化</td><td class="c">5</td><td class="c">8</td><td>稳定性与流畅基线</td></tr>
+        <tr><td>WP3.3 兼容性</td><td class="c">4</td><td class="c">6</td><td>机型矩阵与回退路径</td></tr>
+        <tr><td>WP3.4 交付包</td><td class="c">5</td><td class="c">5</td><td>绿色免安装版</td></tr>
+        <tr style="background:#EAF1F8;"><td class="c" colspan="2"><b>合计</b></td><td class="c"><b>53</b></td><td class="c"><b>67 人日</b></td><td><b>约 13.4 周净工时 + 缓冲 ≈ 18–20 周</b></td></tr>
+      </tbody>
+    </table>
+    <p class="muted">注：净工时 67 人日约 13.4 周，叠加需求沟通、测试回归、缺陷修复与阶段间缓冲后，整体按 18–20 周安排，与规划一致。</p>
+
+    <figure>
+      <svg viewBox="0 0 680 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="四阶段工时分布">
+        <text x="40" y="28" font-size="15" font-weight="700" fill="#1F3A5F">各阶段工时分布（人日）</text>
+        <g font-size="13" fill="#243040">
+          <text x="40" y="66">阶段 0</text><rect x="130" y="52" width="50" height="22" rx="3" fill="#2E5C8A"/><text x="188" y="67" font-size="12" fill="#4C5B6E">5</text>
+          <text x="40" y="106">阶段 1</text><rect x="130" y="92" width="170" height="22" rx="3" fill="#2E5C8A"/><text x="308" y="107" font-size="12" fill="#4C5B6E">17</text>
+          <text x="40" y="146">阶段 2</text><rect x="130" y="132" width="180" height="22" rx="3" fill="#22704A"/><text x="318" y="147" font-size="12" fill="#4C5B6E">18</text>
+          <text x="40" y="186">阶段 3</text><rect x="130" y="172" width="270" height="22" rx="3" fill="#22704A"/><text x="408" y="187" font-size="12" fill="#4C5B6E">27</text>
+        </g>
+        <line x1="130" y1="210" x2="130" y2="226" stroke="#B4B2A9" stroke-width="1"/>
+        <line x1="400" y1="210" x2="400" y2="226" stroke="#B4B2A9" stroke-width="1"/>
+        <g font-size="11" fill="#7A8798"><text x="124" y="240">0</text><text x="392" y="240">27</text></g>
+        <text x="40" y="276" font-size="12" fill="#7A8798">阶段 3 占比最高（27 人日），因为其含多屏、性能、兼容与交付包四类工作。</text>
+      </svg>
+      <figcaption>图 1 · 各阶段工时分布</figcaption>
+    </figure>
+  </section>
+  <div class="footer"><span>录屏软件项目 · 任务拆解 WBS</span><span>1 / 总览</span></div>
+</div>
+
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">2</span><h2>阶段 0–1 任务明细</h2></div>
+    <h3>阶段 0 · 技术验证（WP0.1）</h3>
+    <table class="dt">
+      <thead><tr><th style="width:8%">编号</th><th style="width:44%">任务</th><th style="width:16%">依赖</th><th style="width:10%">人日</th><th>优先级</th></tr></thead>
+      <tbody>
+        <tr><td class="c">0.1.1</td><td>验证 Windows 全屏捕获方案（GDI/DXGI）可行性与帧率</td><td class="c">—</td><td class="c">1.5</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">0.1.2</td><td>验证 H.264 硬件编码可用性与画质基线</td><td class="c">—</td><td class="c">1.5</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">0.1.3</td><td>验证 1080p/30fps 下 CPU 占用是否满足"流畅优先"</td><td class="c">0.1.1/0.1.2</td><td class="c">1.0</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">0.1.4</td><td>输出技术验证报告，冻结实现方案</td><td class="c">0.1.1–0.1.3</td><td class="c">1.0</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>阶段 1 · MVP（WP1.1–WP1.3）</h3>
+    <table class="dt">
+      <thead><tr><th style="width:8%">编号</th><th style="width:44%">任务</th><th style="width:16%">依赖</th><th style="width:10%">人日</th><th>优先级</th></tr></thead>
+      <tbody>
+        <tr><td class="c">1.1.1</td><td>主界面框架与参数设置面板</td><td class="c">阶段 0</td><td class="c">1.5</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">1.1.2</td><td>悬浮控制条 UI</td><td class="c">—</td><td class="c">1.0</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">1.1.3</td><td>录制状态机（空闲/录制/暂停/保存）</td><td class="c">—</td><td class="c">2.0</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">1.1.4</td><td>全局快捷键</td><td class="c">1.1.3</td><td class="c">1.0</td><td class="c"><span class="tag t-p1">P1</span></td></tr>
+        <tr><td class="c">1.1.5</td><td>控制层联调</td><td class="c">1.1.1–1.1.4</td><td class="c">0.5</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">1.2.1</td><td>全屏画面采集实现</td><td class="c">阶段 0</td><td class="c">2.5</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">1.2.2</td><td>采集帧率与分辨率控制（1080p/30fps）</td><td class="c">1.2.1</td><td class="c">1.5</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">1.2.3</td><td>采集异常监测（黑屏/掉帧）</td><td class="c">1.2.1</td><td class="c">1.0</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">1.2.4</td><td>屏幕捕获与状态机集成</td><td class="c">1.2.2/1.1.3</td><td class="c">1.0</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">1.3.1</td><td>鼠标点击位置捕获</td><td class="c">—</td><td class="c">1.5</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">1.3.2</td><td>点击涟漪效果渲染</td><td class="c">1.3.1</td><td class="c">1.5</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">1.3.3</td><td>光标高亮效果</td><td class="c">1.3.1</td><td class="c">1.0</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">1.3.4</td><td>鼠标轨迹效果（含采样频率限制）</td><td class="c">1.3.1</td><td class="c">1.0</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">2.1.1</td><td>H.264 编码集成（硬件优先）</td><td class="c">阶段 0</td><td class="c">2.0</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">2.1.2</td><td>MP4 封装与音视频时间戳</td><td class="c">2.1.1</td><td class="c">1.5</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">2.1.3</td><td>保存流程与文件落盘</td><td class="c">2.1.2</td><td class="c">1.0</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+        <tr><td class="c">2.1.4</td><td>内置回放与播放校验</td><td class="c">2.1.3</td><td class="c">0.5</td><td class="c"><span class="tag t-p0">P0</span></td></tr>
+      </tbody>
+    </table>
+    <p class="muted">阶段 1 出口条件：录一段操作流程 → 保存为通用 MP4 → 回放确认，端到端无阻断缺陷。</p>
+  </section>
+  <div class="footer"><span>录屏软件项目 · 任务拆解 WBS</span><span>2 / 阶段 0–1</span></div>
+</div>
+
+<div class="page">
+  <section>
+    <div class="sec-h"><span class="num">3</span><h2>阶段 2–3 任务明细与关键路径</h2></div>
+    <h3>阶段 2 · 功能增强（WP2.1–WP2.3）</h3>
+    <table class="dt">
+      <thead><tr><th style="width:8%">编号</th><th style="width:44%">任务</th><th style="width:16%">依赖</th><th style="width:10%">人日</th><th>优先级</th></tr></thead>
+      <tbody>
+        <tr><td class="c">2.2.1</td><td>系统音采集（环回）</td><td class="c">阶段 1</td><td class="c">1.5</td><td class="c"><span class="tag t-p1">P1</span></td></tr>
+        <tr><td class="c">2.2.2</td><td>麦克风采集</td><td class="c">阶段 1</td><td class="c">1.0</td><td class="c"><span class="tag t-p1">P1</span></td></tr>
+        <tr><td class="c">2.2.3</td><td>双路混音</td><td class="c">2.2.1/2.2.2</td><td class="c">1.5</td><td class="c"><span class="tag t-p1">P1</span></td></tr>
+        <tr><td class="c">2.2.4</td><td>音画时间戳对齐</td><td class="c">2.2.3</td><td class="c">2.0</td><td class="c"><span class="tag t-p1">P1</span></td></tr>
+        <tr><td class="c">2.2.5</td><td>音画同步专项测试与调优</td><td class="c">2.2.4</td><td class="c">1.0</td><td class="c"><span class="tag t-p1">P1</span></td></tr>
+        <tr><td class="c">2.3.1</td><td>窗口捕获模式</td><td class="c">阶段 1</td><td class="c">2.0</td><td class="c"><span class="tag t-p1">P1</span></td></tr>
+        <tr><td class="c">2.3.2</td><td>自定义区域捕获模式</td><td class="c">阶段 1</td><td class="c">2.0</td><td class="c"><span class="tag t-p1">P1</span></td></tr>
+        <tr><td class="c">2.3.3</td><td>清晰度/码率参数配置</td><td class="c">2.1.1</td><td class="c">1.0</td><td class="c"><span class="tag t-p1">P1</span></td></tr>
+        <tr><td class="c">2.3.4</td><td>按键提示效果</td><td class="c">阶段 1</td><td class="c">1.0</td><td class="c"><span class="tag t-p2">P2</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>阶段 3 · 优化与交付（WP3.1–WP3.4，详见阶段 3 实施方案）</h3>
+    <table class="dt">
+      <thead><tr><th style="width:8%">编号</th><th style="width:44%">任务</th><th style="width:16%">依赖</th><th style="width:10%">人日</th><th>优先级</th></tr></thead>
+      <tbody>
+        <tr><td class="c">3.1.1–3.1.5</td><td>显示器枚举、坐标映射、单屏/拼接、跨屏点击定位、配置界面（5 项）</td><td class="c">阶段 1/2</td><td class="c">8</td><td class="c"><span class="tag t-p2">P2</span></td></tr>
+        <tr><td class="c">3.2.1–3.2.5</td><td>缓冲优化、内存排查、轨迹开销优化、流畅档位固化、CPU/GPU 基线测量（5 项）</td><td class="c">阶段 1</td><td class="c">8</td><td class="c"><span class="tag t-p2">P2</span></td></tr>
+        <tr><td class="c">3.3.1–3.3.4</td><td>机型矩阵、捕获回退、编码回退、兼容性回归（4 项）</td><td class="c">WP3.1/3.2</td><td class="c">6</td><td class="c"><span class="tag t-p2">P2</span></td></tr>
+        <tr><td class="c">3.4.1–3.4.5</td><td>目录结构、配置初始化、无残留卸载、使用说明、版本与本地日志（5 项）</td><td class="c">主体冻结</td><td class="c">5</td><td class="c"><span class="tag t-p2">P2</span></td></tr>
+      </tbody>
+    </table>
+
+    <h3>关键路径与排程约束</h3>
+    <p class="lead">关键路径：<b>阶段 0 技术验证 → 屏幕捕获 → 状态机集成 → 编码导出 → 回放 → 阶段 3 性能优化 → 兼容性 → 交付包</b>。该路径决定总工期，任何一环延误都会顺延整体交付。</p>
+    <div class="callout"><b>排程风险提示：</b>① 阶段 0 技术验证若发现捕获或编码方案不可行，需启用回退方案，可能增加 3–5 人日；② 阶段 2 音画同步调优存在不确定性，是本 WBS 中最易超时的单项；③ 阶段 3 兼容性受机型矩阵规模影响，机型越多耗时越长。建议在每阶段出口设置一次排程复核。</div>
+  </section>
+  <div class="footer"><span>录屏软件项目 · 任务拆解 WBS</span><span>3 / 阶段 2–3 与关键路径</span></div>
+</div>
+
+</body>
+</html>

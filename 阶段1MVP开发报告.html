@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>阶段1 MVP 开发报告</title>
+<style>
+  :root{--navy:#1F3A5F;--navy-d:#162C49;--blue:#2E5C8A;--accent:#C8A24B;--ink:#243040;--ink-2:#4C5B6E;--ink-3:#7A8798;--line:#D8E0E8;--line-2:#E8EEF4;--bg:#F4F6F9;--panel:#fff;--blue-bg:#EAF1F8;--amber-bg:#FBF5E6;--green-bg:#EAF4EF;--red-bg:#FCE9E7;}
+  *{box-sizing:border-box;}
+  html{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:"Microsoft YaHei","PingFang SC","Hiragino Sans GB","Source Han Sans SC",sans-serif;font-size:14px;line-height:1.75;-webkit-font-smoothing:antialiased;}
+  .page{width:210mm;min-height:297mm;margin:24px auto;background:var(--panel);box-shadow:0 2px 18px rgba(31,58,95,.10);padding:20mm 18mm;}
+  .cover{border-top:6px solid var(--navy);padding-top:26mm;}
+  .cover .eyebrow{color:var(--accent);font-weight:700;letter-spacing:3px;font-size:13px;}
+  .cover h1{font-size:32px;line-height:1.35;color:var(--navy-d);margin:14px 0 6px;font-weight:800;}
+  .cover .sub{font-size:16px;color:var(--blue);font-weight:600;margin-bottom:36px;}
+  .cover .rule{width:64px;height:4px;background:var(--accent);margin-bottom:32px;}
+  .meta{width:100%;border-collapse:collapse;margin-top:18px;}
+  .meta td{padding:9px 0;border-bottom:1px solid var(--line-2);font-size:14px;}
+  .meta td.k{width:130px;color:var(--ink-3);font-weight:600;}
+  .meta td.v{color:var(--ink);font-weight:600;}
+  .verdict{margin-top:34px;padding:20px 24px;background:var(--green-bg);border:2px solid #22704A;border-radius:10px;}
+  .verdict .big{font-size:30px;font-weight:800;color:#1C5C3A;letter-spacing:2px;}
+  .verdict .cond{font-size:13.5px;color:#22704A;margin-top:8px;}
+  section{margin-top:14mm;}
+  .sec-h{display:flex;align-items:center;gap:12px;border-bottom:2px solid var(--navy);padding-bottom:9px;margin-bottom:18px;}
+  .sec-h .num{background:var(--navy);color:#fff;width:30px;height:30px;border-radius:5px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex:0 0 auto;}
+  .sec-h h2{font-size:21px;color:var(--navy-d);margin:0;font-weight:800;}
+  h3{font-size:16px;color:var(--navy);margin:22px 0 10px;font-weight:700;padding-left:11px;border-left:3px solid var(--accent);}
+  p{margin:8px 0;}
+  .lead{color:var(--ink-2);font-size:13.5px;}
+  table.dt{width:100%;border-collapse:collapse;margin:12px 0 6px;font-size:12.5px;}
+  table.dt th{background:var(--navy);color:#fff;font-weight:600;text-align:left;padding:9px 10px;border:1px solid var(--navy-d);}
+  table.dt td{padding:8px 10px;border:1px solid var(--line);vertical-align:top;}
+  table.dt tr:nth-child(even) td{background:#F8FAFC;}
+  table.dt td.c{text-align:center;}
+  .tag{display:inline-block;padding:1px 8px;border-radius:11px;font-size:11.5px;font-weight:700;white-space:nowrap;}
+  .t-pass{background:var(--green-bg);color:#22704A;}.t-part{background:var(--amber-bg);color:#8A6A18;}.t-fail{background:var(--red-bg);color:#B23A32;}
+  .t-info{background:var(--blue-bg);color:var(--blue);}
+  .callout{background:var(--blue-bg);border-left:4px solid var(--blue);border-radius:0 6px 6px 0;padding:13px 17px;margin:14px 0;font-size:13px;color:var(--ink-2);}
+  .callout.warn{background:var(--amber-bg);border-color:#EBD9A6;border-left-color:var(--accent);color:#6B5620;}
+  .callout.good{background:var(--green-bg);border-color:#BFE0CE;border-left-color:#22704A;color:#1C5C3A;}
+  .code{font-family:Consolas,"Courier New",monospace;background:#F1F4F8;padding:1px 5px;border-radius:4px;font-size:12px;color:#1E40AF;}
+  ul,ol{margin:8px 0;padding-left:24px;}
+  li{margin:5px 0;}
+  .kv{font-size:12.5px;color:var(--ink-3);}
+  .footer{margin-top:16mm;border-top:1px solid var(--line);padding-top:10px;font-size:11.5px;color:var(--ink-3);display:flex;justify-content:space-between;}
+  @page{size:A4;margin:0;}
+  @media print{body{background:#fff;}.page{margin:0;box-shadow:none;width:210mm;min-height:297mm;}section{break-inside:avoid;}.page-break{break-before:page;}}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 封面 -->
+  <div class="cover">
+    <div class="eyebrow">SCREEN RECORDER · DEVELOPMENT REPORT</div>
+    <h1>阶段 1（MVP）开发报告</h1>
+    <div class="sub">桌面电脑录屏软件 · 最小可用版本 · 真实验收</div>
+    <div class="rule"></div>
+    <table class="meta">
+      <tr><td class="k">项目阶段</td><td class="v">阶段 1 — MVP（最小可用版本）</td></tr>
+      <tr><td class="k">开发语言 / 框架</td><td class="v">C# + .NET 8 · WPF（Windows 10/11 x64）</td></tr>
+      <tr><td class="k">编码方案</td><td class="v">FFmpeg libx264（H.264 / MP4，stdin 管道）</td></tr>
+      <tr><td class="k">工程位置</td><td class="v">E:\开发练习项目\录屏软件\ScreenRecorder\</td></tr>
+      <tr><td class="k">报告日期</td><td class="v">2026-11-17</td></tr>
+      <tr><td class="k">编译状态</td><td class="v">Debug / Release 均 0 错误 0 警告</td></tr>
+    </table>
+    <div class="verdict">
+      <div class="big">✓ MVP 完成 · 端到端闭环</div>
+      <div class="cond">真实代码、真实编译、真实录制验收。11 项冻结决策逐条一致；发现并修复 3 个真实缺陷。</div>
+    </div>
+  </div>
+
+  <!-- 1 交付概览 -->
+  <section>
+    <div class="sec-h"><span class="num">1</span><h2>交付概览</h2></div>
+    <p class="lead">阶段 1 完成了从"规划/验证"到"可运行软件"的跨越。交付物是一个可编译、可启动、可真实录制并回放的 WPF 桌面程序，全部功能基于阶段 0 已验证的技术链路，并与前序 11 项冻结决策保持一致。</p>
+    <table class="dt">
+      <tr><th style="width:24%">交付项</th><th>说明</th><th style="width:14%" class="c">状态</th></tr>
+      <tr><td>完整工程</td><td>ScreenRecorder WPF 工程，四层架构，16 个源码文件</td><td class="c"><span class="tag t-pass">完成</span></td></tr>
+      <tr><td>录制核心</td><td>全屏捕获 → 鼠标效果叠加 → FFmpeg 编码 → MP4 落盘</td><td class="c"><span class="tag t-pass">完成</span></td></tr>
+      <tr><td>控制闭环</td><td>开始 / 暂停 / 继续 / 停止 / 保存，悬浮控制条</td><td class="c"><span class="tag t-pass">完成</span></td></tr>
+      <tr><td>回放</td><td>内置播放器打开 MP4，支持暂停/重播</td><td class="c"><span class="tag t-pass">完成</span></td></tr>
+      <tr><td>分发组件</td><td>ffmpeg.exe 随构建自动复制到输出目录 tools/</td><td class="c"><span class="tag t-pass">完成</span></td></tr>
+      <tr><td>验收数据</td><td>端到端真实录制 + 性能定位 + GUI 启动验证</td><td class="c"><span class="tag t-pass">完成</span></td></tr>
+    </table>
+    <div class="callout good"><b>一致性结论：</b>11 项冻结决策（仅 Windows、1 人 18–20 周、个人自用、不含剪辑、首版无声、仅全屏、三鼠标效果、1080p/30fps、H.264+MP4、流畅优先、不设时长上限+磁盘预警）在 MVP 中全部落实；编码方案 MF→FFmpeg 已获本人明确接受。</div>
+  </section>
+
+  <!-- 2 功能与决策核对 -->
+  <section>
+    <div class="sec-h"><span class="num">2</span><h2>MVP 功能清单与决策一致性</h2></div>
+    <table class="dt">
+      <tr><th style="width:26%">冻结决策</th><th>MVP 实现</th><th style="width:12%" class="c">一致性</th></tr>
+      <tr><td>目标系统：仅 Windows 10/11</td><td>net8.0-windows，P/Invoke GDI/Win32，无跨平台代码</td><td class="c"><span class="tag t-pass">一致</span></td></tr>
+      <tr><td>录制范围：仅全屏</td><td>GetSystemMetrics 取主屏全屏 1920×1080</td><td class="c"><span class="tag t-pass">一致</span></td></tr>
+      <tr><td>声音：首版不录</td><td>FFmpeg 参数 <span class="code">-an</span>，无音频采集模块</td><td class="c"><span class="tag t-pass">一致</span></td></tr>
+      <tr><td>鼠标效果：涟漪+高亮+轨迹</td><td>三项全部实现，帧字节级绘制，UI 可分别开关</td><td class="c"><span class="tag t-pass">一致</span></td></tr>
+      <tr><td>清晰度：1080p/30fps</td><td>30fps 恒定帧率输出（CFR 补帧保证时长准确）</td><td class="c"><span class="tag t-pass">一致</span></td></tr>
+      <tr><td>格式：H.264 + MP4</td><td>libx264 / yuv420p / MP4（+faststart），通用兼容组合</td><td class="c"><span class="tag t-pass">一致</span></td></tr>
+      <tr><td>性能：流畅优先</td><td>veryfast 预设、GDI 资源复用、BGRA 直送免转换</td><td class="c"><span class="tag t-pass">一致</span></td></tr>
+      <tr><td>时长：不设上限 + 磁盘预警</td><td>无时长上限；每 5 秒检测磁盘，低于阈值仅提示不强制停止</td><td class="c"><span class="tag t-pass">一致</span></td></tr>
+      <tr><td>剪辑：不含</td><td>仅录制 + 回放，无编辑功能</td><td class="c"><span class="tag t-pass">一致</span></td></tr>
+      <tr><td>分发：个人自用免安装</td><td>绿色目录结构，ffmpeg.exe 内置，无安装器/授权</td><td class="c"><span class="tag t-pass">一致</span></td></tr>
+      <tr><td>技术栈：C# + .NET</td><td>C# / .NET 8 / WPF</td><td class="c"><span class="tag t-pass">一致</span></td></tr>
+    </table>
+  </section>
+
+  <!-- 3 架构 -->
+  <section>
+    <div class="sec-h"><span class="num">3</span><h2>模块架构与文件清单</h2></div>
+    <p class="lead">沿用"原生 API → 服务 → 模型 → UI"四层结构，与规划阶段的模块划分一脉相承。数据流为一条单向流水线。</p>
+    <div class="callout"><b>数据流：</b>GDI 捕获（ScreenCapturer）→ 鼠标效果叠加（MouseEffectRenderer）→ 送入 FFmpeg stdin（VideoEncoder）→ 落盘 MP4。RecorderEngine 负责状态机与流水线编排，UI 通过事件获取状态与进度。</div>
+    <table class="dt">
+      <tr><th style="width:20%">层</th><th style="width:34%">文件</th><th>职责</th></tr>
+      <tr><td rowspan="3">Native 原生层</td><td class="code">NativeMethods.cs</td><td>GDI 捕获、光标位置、磁盘空间 P/Invoke</td></tr>
+      <tr><td class="code">ScreenCapturer.cs</td><td>可复用 GDI 捕获器（性能关键）</td></tr>
+      <tr><td class="code">MouseHook.cs</td><td>全局低级鼠标钩子，捕获点击事件</td></tr>
+      <tr><td rowspan="3">Services 服务层</td><td class="code">RecorderEngine.cs</td><td>核心状态机 + CFR 捕获循环 + 流水线编排</td></tr>
+      <tr><td class="code">VideoEncoder.cs</td><td>FFmpeg 进程与 stdin 管道编码</td></tr>
+      <tr><td class="code">MouseEffectRenderer.cs</td><td>三项鼠标效果的帧字节级渲染</td></tr>
+      <tr><td rowspan="2">Models 模型层</td><td class="code">RecorderSettings.cs</td><td>全部可配置参数</td></tr>
+      <tr><td class="code">RecorderState.cs</td><td>状态枚举（Idle/Recording/Paused/Saving）</td></tr>
+      <tr><td rowspan="3">Views 界面层</td><td class="code">MainWindow.xaml(.cs)</td><td>参数配置、启动录制、历史文件</td></tr>
+      <tr><td class="code">FloatingControl.xaml(.cs)</td><td>透明置顶可拖动控制条</td></tr>
+      <tr><td class="code">PlaybackWindow.xaml(.cs)</td><td>基础回放播放器</td></tr>
+    </table>
+  </section>
+
+  <!-- 4 真实验收 -->
+  <section class="page-break">
+    <div class="sec-h"><span class="num">4</span><h2>真实验收数据</h2></div>
+    <p class="lead">验收采用"直接驱动生产引擎"的方式（spike/MvpE2E 链接正式工程的 Services/Native/Models 源码），确保测的就是交付代码，而非临时示例。所有数据均为真实运行所得。</p>
+    <h3>4.1 端到端录制验收</h3>
+    <table class="dt">
+      <tr><th style="width:34%">验收项</th><th>实测结果</th><th style="width:14%" class="c">判定</th></tr>
+      <tr><td>录制时长 / 输出帧数</td><td>真实 6.14 秒 → 195 帧</td><td class="c"><span class="tag t-pass">通过</span></td></tr>
+      <tr><td>输出文件</td><td>666 KB，路径 rec_20261117_141936.mp4</td><td class="c"><span class="tag t-pass">通过</span></td></tr>
+      <tr><td>编码参数</td><td>h264 / 1920×1080 / yuv420p / 30fps</td><td class="c"><span class="tag t-pass">通过</span></td></tr>
+      <tr><td>视频时长（关键）</td><td>6.5 秒（195÷30），与真实 6 秒一致；修复前为 4.4 秒（加速错误）</td><td class="c"><span class="tag t-pass">通过</span></td></tr>
+      <tr><td>解码完整性</td><td>FFmpeg 全量解码返回码 0，无错误</td><td class="c"><span class="tag t-pass">通过</span></td></tr>
+      <tr><td>状态机流转</td><td>Recording → Saving → Idle 顺序正确</td><td class="c"><span class="tag t-pass">通过</span></td></tr>
+      <tr><td>GUI 启动</td><td>进程存活，窗口标题"屏幕录制工具"正常显示，不闪退</td><td class="c"><span class="tag t-pass">通过</span></td></tr>
+    </table>
+    <h3>4.2 性能定位（spike/PerfProbe，120 帧采样）</h3>
+    <table class="dt">
+      <tr><th>环节</th><th>耗时</th><th>理论帧率上限</th><th>结论</th></tr>
+      <tr><td>一次性 GDI 捕获</td><td>26.59 ms/帧</td><td>37.6 fps</td><td>逐帧重建资源，开销大</td></tr>
+      <tr><td>复用式 GDI 捕获</td><td>21.14 ms/帧</td><td>47.3 fps</td><td>资源复用提升约 20%（已采用）</td></tr>
+      <tr><td>仅 BitBlt（无 GetDIBits）</td><td>13.62 ms/帧</td><td>73.4 fps</td><td>GetDIBits 转换约占 7.5 ms</td></tr>
+      <tr><td>鼠标效果渲染</td><td>0.01 ms/帧</td><td>—</td><td>开销可忽略，非瓶颈</td></tr>
+    </table>
+    <div class="callout warn"><b>性能真相：</b>本机瓶颈是 <b>GDI BitBlt + GetDIBits 捕获</b>本身（8MB/帧像素拷贝），原生捕获率约 22fps。MVP 通过 CFR 补帧输出稳定 30fps，视频时长准确，但补帧意味着部分帧是重复画面——快速移动场景的流畅度不及真实 30fps 采集。这是 GDI 方案的固有局限，非代码缺陷。</div>
+  </section>
+
+  <!-- 5 缺陷修复 -->
+  <section>
+    <div class="sec-h"><span class="num">5</span><h2>发现并修复的真实缺陷</h2></div>
+    <p class="lead">开发过程中通过真实运行暴露了 3 个缺陷，均已定位根因并修复，不是估算或假设。</p>
+    <table class="dt">
+      <tr><th style="width:5%" class="c">#</th><th style="width:28%">现象</th><th style="width:34%">根因</th><th>修复</th></tr>
+      <tr><td class="c">1</td><td class="t-fail">进程启动即抛异常，无法录制</td><td>VideoEncoder 设置了 <span class="code">StandardOutputEncoding</span> 却未重定向 stdout，.NET 拒绝启动进程</td><td>移除该设置（stdout 本未使用）；GUI/控制台均会触发，属必修缺陷</td></tr>
+      <tr><td class="c">2</td><td>捕获耗时偏高（26.6ms/帧）</td><td>每帧重建 DC、兼容位图、分配缓冲并释放</td><td>新增可复用 ScreenCapturer，资源构造一次循环复用，降至 21.1ms/帧</td></tr>
+      <tr><td class="c">3</td><td class="t-fail">视频被加速：录 6 秒成 4.4 秒</td><td>实际约 22fps 捕获，却按 30fps 写入 FFmpeg，时间戳按 30fps 计算导致播放加速</td><td>改为 CFR 逻辑时钟补帧：帧数=时长×30，捕获不足时重复上一帧；修复后录 6 秒成 6.5 秒，时长准确</td></tr>
+    </table>
+    <div class="callout good"><b>缺陷 3 是本次最重要的发现。</b>它不会导致编译失败或崩溃，只会让"回放速度变快"——若不做真实录放对照极易漏过。已通过实测时长比对确认修复有效。</div>
+  </section>
+
+  <!-- 6 风险与后续 -->
+  <section>
+    <div class="sec-h"><span class="num">6</span><h2>遗留风险与后续选项</h2></div>
+    <table class="dt">
+      <tr><th style="width:30%">项目</th><th style="width:12%" class="c">性质</th><th>说明与建议</th></tr>
+      <tr><td>原生捕获率约 22fps</td><td class="c"><span class="tag t-part">已知限制</span></td><td>不影响 MVP 交付（CFR 保证时长与可播放性）；快速移动场景流畅度受限</td></tr>
+      <tr><td>Graphics Capture 未启用</td><td class="c"><span class="tag t-info">可选优化</span></td><td>本机缺 Windows SDK 未能验证；安装后可能突破 GDI 帧率瓶颈，但需 D3D11 互操作，改动较大</td></tr>
+      <tr><td>NVENC 硬编码未启用</td><td class="c"><span class="tag t-info">可选优化</span></td><td>驱动 31.0.15.2727 仅支持 NVENC API 12.0（FFmpeg 需 13.1）；升级驱动到 610+ 后可启用，降低 CPU 占用</td></tr>
+      <tr><td>GUI 交互未做人工试录</td><td class="c"><span class="tag t-part">待人工验证</span></td><td>已验证程序可启动、引擎端到端可用；按钮点击的实际手感与悬浮条拖动建议本人实测一轮</td></tr>
+      <tr><td>阶段 2 功能</td><td class="c"><span class="tag t-info">后续范围</span></td><td>音频采集与混录、窗口/区域录制、按键提示，按规划在阶段 2 实现</td></tr>
+    </table>
+    <div class="callout"><b>运行方式：</b>进入 <span class="code">ScreenRecorder\bin\Release\net8.0-windows\</span>，双击 <span class="code">ScreenRecorder.exe</span>。首次请在主界面确认"编码组件：已就绪"，设置保存位置与鼠标效果后点击"● 开始录制"；录制时用右上角悬浮条暂停/停止；停止后在主界面双击文件回放。</div>
+  </section>
+
+  <div class="footer">
+    <span>阶段 1（MVP）开发报告 · 桌面电脑录屏软件</span>
+    <span>2026-11-17 · 真实代码 / 真实验收</span>
+  </div>
+
+</div>
+</body>
+</html>

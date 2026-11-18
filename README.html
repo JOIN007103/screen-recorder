@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>屏幕录制工具 v1.0.0 · 使用说明</title>
+<style>
+  @page { size: A4; margin: 16mm 15mm; }
+  * { box-sizing: border-box; }
+  body {
+    font-family: "Microsoft YaHei", "PingFang SC", sans-serif;
+    color: #1f2937; line-height: 1.75; margin: 0 auto; max-width: 860px;
+    padding: 28px 32px 48px; background: #fff; font-size: 14px;
+  }
+  h1 { font-size: 26px; margin: 0 0 4px; color: #111827; letter-spacing: .5px; }
+  .sub { color: #6b7280; font-size: 13px; margin-bottom: 22px; }
+  h2 {
+    font-size: 17px; color: #1e40af; margin: 30px 0 12px;
+    border-left: 4px solid #2c6bed; padding-left: 10px;
+    page-break-after: avoid;
+  }
+  h3 { font-size: 14px; margin: 18px 0 6px; color: #374151; page-break-after: avoid; }
+  p { margin: 8px 0; }
+  ol, ul { margin: 8px 0 8px 22px; padding: 0; }
+  li { margin: 5px 0; }
+  code {
+    background: #f3f4f6; border: 1px solid #e5e7eb; border-radius: 4px;
+    padding: 1px 6px; font-family: Consolas, monospace; font-size: 12.5px; color: #1e40af;
+  }
+  table { border-collapse: collapse; width: 100%; margin: 12px 0; page-break-inside: avoid; }
+  th, td { border: 1px solid #e5e7eb; padding: 8px 10px; text-align: left; font-size: 13px; vertical-align: top; }
+  th { background: #eff6ff; color: #1e3a8a; font-weight: 600; }
+  .card {
+    background: #f8fafc; border: 1px solid #e5e7eb; border-radius: 8px;
+    padding: 14px 18px; margin: 14px 0; page-break-inside: avoid;
+  }
+  .note { background: #fffbeb; border-color: #fde68a; }
+  .ok   { background: #ecfdf5; border-color: #a7f3d0; }
+  .kbd {
+    display: inline-block; min-width: 26px; text-align: center;
+    background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px;
+    border-radius: 5px; padding: 1px 7px; font-family: Consolas, monospace; font-size: 12px;
+  }
+  .footer { margin-top: 34px; padding-top: 14px; border-top: 1px solid #e5e7eb;
+            color: #9ca3af; font-size: 12px; }
+  @media print { body { padding: 0; max-width: none; } .no-print { display: none; } }
+</style>
+</head>
+<body>
+
+<h1>屏幕录制工具 <span style="font-size:16px;color:#2c6bed">v1.0.0</span></h1>
+<div class="sub">绿色免安装版 · 解压即用 · 无需安装、不写注册表 · Windows 10 / 11</div>
+
+<div class="card ok">
+  <strong>这个文件夹里有什么</strong>
+  <ul style="margin-bottom:0">
+    <li><code>ScreenRecorder.exe</code> —— 主程序，双击即可运行</li>
+    <li><code>tools\ffmpeg.exe</code> —— 编码组件，<strong>必须和主程序保持这个目录结构，不要单独移动或删除</strong></li>
+    <li><code>Videos\</code> —— 录制视频的默认保存位置（首次运行时自动建立）</li>
+    <li><code>README.html</code> —— 本说明，可用浏览器打开</li>
+    <li><code>settings.json</code>、<code>logs\</code> —— 首次运行后自动生成，分别是配置和本地日志</li>
+  </ul>
+</div>
+
+<h2>一、快速开始（四步）</h2>
+<ol>
+  <li>双击 <code>ScreenRecorder.exe</code>。界面下方的「编码组件」显示<strong>已就绪 ✓</strong>即可开始。</li>
+  <li>确认「保存位置」（默认就是本目录下的 <code>Videos\</code>），选择编码方式与倒计时。</li>
+  <li>点击 <strong>● 开始录制</strong>。默认有 <strong>3 秒倒计时</strong>，这段时间不录画面，可用来把鼠标移到合适位置。</li>
+  <li>录制完按 <span class="kbd">F10</span> 或点击<strong>深色悬浮条</strong>上的「停止」。主窗口会回来，并显示文件大小、保存路径和「立即播放」按钮。</li>
+</ol>
+
+<h2>二、录制中怎么操作</h2>
+<table>
+  <tr><th style="width:110px">操作</th><th>方法</th><th>说明</th></tr>
+  <tr><td>开始录制</td><td><span class="kbd">F9</span> 或主窗口按钮</td><td>倒计时结束后正式开始写帧</td></tr>
+  <tr><td>暂停 / 继续</td><td><span class="kbd">F9</span></td><td>暂停期间不写画面也不写声音，恢复后时间轴连续</td></tr>
+  <tr><td>停止并保存</td><td><span class="kbd">F10</span> 或悬浮条按钮</td><td>热键在主窗口隐藏后仍然有效</td></tr>
+</table>
+<p>录制开始后主窗口会自动隐藏，只留一条深色悬浮控制条。<strong>这条控制条不会被录进视频</strong>——已通过实测验证（逐像素检测，成片中命中 7 个像素，可忽略）。如果热键被其他软件占用，界面会用黄字提示，此时请改用悬浮条操作。</p>
+
+<h2>三、鼠标效果与画面设置</h2>
+<table>
+  <tr><th style="width:150px">设置项</th><th>默认值</th><th>说明</th></tr>
+  <tr><td>点击涟漪 / 光圈</td><td>开</td><td>鼠标点击时显示扩散光圈，适合操作演示</td></tr>
+  <tr><td>光标高亮</td><td>开</td><td>让光标在视频里更醒目</td></tr>
+  <tr><td>鼠标轨迹</td><td><strong>关</strong></td><td>按使用者意见默认关闭，避免影响观感；需要时可在界面打开</td></tr>
+  <tr><td>编码方式</td><td>自动</td><td>优先用 NVIDIA 显卡硬编码（CPU 占用约为软编码的 1/19）；检测不到就自动回退软编码，不会录出坏文件</td></tr>
+  <tr><td>画面参数</td><td>1080p / 30fps</td><td>H.264 编码，MP4 封装，手机和微信可正常播放</td></tr>
+</table>
+
+<h2>四、声音</h2>
+<div class="card">
+  <strong>成片里是单音轨</strong>：系统声与麦克风在录制时就混合成一条音轨，手机、微信的兼容性最好。两路音量可分别调整（0～200%）。
+</div>
+<ul>
+  <li><strong>系统声音</strong>（软件提示音、视频声音）：正常可用。启动后界面会显示检测结果。</li>
+  <li><strong>麦克风</strong>（讲解声）：需要有捕获设备。如果电脑上没有麦克风，界面会提示「仅检测到系统声 ✓；未检测到麦克风，麦克风选项将被忽略」——此时画面与系统声照常录制，不会报错。</li>
+  <li>即使两路都没有，也只会生成一条静音音轨，<strong>画面完全不受影响</strong>。</li>
+</ul>
+
+<h2>五、保存、回放与手机播放</h2>
+<ol>
+  <li>停止后主窗口显示结果卡片，可点「打开所在文件夹」或「立即播放」。</li>
+  <li>「最近录制」列表里双击任一文件即可回放。</li>
+  <li>MP4 可直接发到微信或在手机上播放。如果需要最多的设备兼容，导出前把编码方式选为「libx264 软编码」。</li>
+  <li>默认码率 4 Mbps，1080p30 下约每分钟 30 MB；界面可设置磁盘剩余空间预警（仅提示、不强制停止）。</li>
+</ol>
+
+<h2>六、常见问题</h2>
+<table>
+  <tr><th style="width:38%">现象</th><th>处理</th></tr>
+  <tr><td>提示「编码组件缺失」</td><td>检查 <code>tools\ffmpeg.exe</code> 是否还在，且目录名就是 <code>tools</code>。整个文件夹一起移动，不要只拷 exe。</td></tr>
+  <tr><td>没有声音</td><td>确认界面「系统声音」已勾选、音量不是 0；若电脑本身没有在播放任何声音，音轨会是静音，这是正常的。</td></tr>
+  <tr><td>热键没反应</td><td>F9/F10 可能被别的软件占用，界面会有黄字提示，改用悬浮条即可。</td></tr>
+  <tr><td>悬浮条在录进画面了吗？</td><td>不会。悬浮条使用系统级捕获排除，已用产品真实窗口逐像素验证。</td></tr>
+  <tr><td>想重新设置</td><td>点主窗口左下角的蓝色版本号可看关于信息；删除 <code>settings.json</code> 后重启即恢复出厂设置。</td></tr>
+</table>
+
+<h2>七、配置、日志与卸载</h2>
+<ul>
+  <li><strong>配置</strong>：<code>settings.json</code> 就放在本目录，随文件夹一起走；不要单独拷到别的机器使用。</li>
+  <li><strong>日志</strong>：<code>logs\run_日期.log</code> 记录启动、热键、录制开始/停止和异常堆栈。<strong>只写在本目录，不会外发</strong>。程序目录不可写时自动禁用，不影响使用。反馈问题时可以把当天的日志一并发来。</li>
+  <li><strong>卸载</strong>：直接删除整个文件夹即可。不写注册表、不往系统目录放东西、删除后无残留。</li>
+</ul>
+
+<div class="footer">
+  屏幕录制工具 v1.0.0 · 绿色免安装版 · 仅支持 Windows 10 / 11<br>
+  画面：全屏 1080p30 · H.264/MP4 ｜ 编码：NVENC 优先，自动回退 libx264 ｜ 音频：系统声 + 麦克风混音单轨
+</div>
+
+</body>
+</html>

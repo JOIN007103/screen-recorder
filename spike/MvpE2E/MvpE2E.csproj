@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <!-- Services 里有依赖 WPF 的 HotkeyManager（HwndSource），故开启 UseWPF -->
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+  <!-- 直接链接正式工程的生产源码，验证的就是同一套代码 -->
+  <ItemGroup>
+    <Compile Include="../../ScreenRecorder/Models/*.cs" Link="Models/%(Filename)%(Extension)" />
+    <Compile Include="../../ScreenRecorder/Native/*.cs" Link="Native/%(Filename)%(Extension)" />
+    <Compile Include="../../ScreenRecorder/Services/*.cs" Link="Services/%(Filename)%(Extension)" />
+  </ItemGroup>
+  <!-- AudioCapturer 依赖 NAudio -->
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.2.1" />
+  </ItemGroup>
+</Project>

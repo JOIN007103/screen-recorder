@@ -1,0 +1,21 @@
+﻿=== WPF 窗口 WDA 排除实测 ===
+系统: 10.0.19045.0
+
+[普通窗口 AllowsTransparency=false]
+  位置 (1440,240) 尺寸 400x300
+  WDA(0x11) 返回 TRUE
+  抓取采样 120000 像素 → 品红 0.6%
+  ✓ 该窗口已被排除出 BitBlt 捕获
+
+[分层窗口 AllowsTransparency=true（产品同款）]
+  位置 (1440,240) 尺寸 400x300
+  WDA(0x11) 返回 FALSE err=8
+  抓取采样 120000 像素 → 品红 100.0%
+  ✗ 仍被捕获
+
+
+--- 判定 ---
+普通窗口: 可排除 ✓
+分层窗口: 无法排除 ✗ → 需去掉 AllowsTransparency 或改收边方案
+
+结论: 悬浮条改为非透明窗口（保留 WindowStyle=None + 深色实底），再调用 WDA。

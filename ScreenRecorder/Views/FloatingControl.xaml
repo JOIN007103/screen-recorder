@@ -1,0 +1,54 @@
+<Window x:Class="ScreenRecorder.Views.FloatingControl"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="录制控制" Height="96" Width="452"
+        WindowStyle="None" Background="#1F2937"
+        Topmost="True" ShowInTaskbar="False"
+        ResizeMode="NoResize" FontFamily="Microsoft YaHei">
+
+    <!--
+        注意：本窗口刻意不使用 AllowsTransparency。
+        实测（Win10 19045）：分层窗口无法用 SetWindowDisplayAffinity(WDA_EXCLUDEFROMCAPTURE)
+        排除出捕获，会返回 FALSE(err=8)，导致控制条被录进视频。
+        必须保持非透明实底，圆角与阴影一并放弃。
+    -->
+    <Border BorderBrush="#4B5563" BorderThickness="1" Background="#1F2937">
+        <Grid Margin="14,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- 录制指示灯 -->
+            <Ellipse x:Name="Led" Grid.Row="0" Grid.Column="0" Width="12" Height="12" Fill="#EF4444"
+                     VerticalAlignment="Center" Margin="2,0,12,0"/>
+
+            <!-- 计时与状态 -->
+            <StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
+                <TextBlock x:Name="TxtTime" Text="00:00" FontSize="22" FontWeight="Bold"
+                           Foreground="White" FontFamily="Consolas"/>
+                <TextBlock x:Name="TxtState" Text="● 正在录制" FontSize="11" Foreground="#D1D5DB"/>
+            </StackPanel>
+
+            <!-- 暂停/继续 -->
+            <Button x:Name="BtnPause" Grid.Row="0" Grid.Column="2" Content="暂停" Width="66" Height="40"
+                    Margin="0,0,8,0" Click="BtnPause_Click" Background="#374151" Foreground="White"
+                    BorderThickness="0" Cursor="Hand" FontSize="13"/>
+
+            <!-- 停止 -->
+            <Button x:Name="BtnStop" Grid.Row="0" Grid.Column="3" Content="■ 停止" Width="74" Height="40"
+                    Click="BtnStop_Click" Background="#EF4444" Foreground="White"
+                    BorderThickness="0" Cursor="Hand" FontSize="13" FontWeight="SemiBold"/>
+
+            <!-- 热键提示 -->
+            <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="F9 暂停/继续 · F10 停止"
+                       FontSize="10" Foreground="#9CA3AF" Margin="0,6,0,0"/>
+        </Grid>
+    </Border>
+</Window>

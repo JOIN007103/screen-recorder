@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>屏幕录制工具 · 跨电脑配置与开发指南 v1.0.0</title>
+<style>
+  @page { size: A4; margin: 15mm 13mm; }
+  * { box-sizing: border-box; }
+  body { font-family:"Microsoft YaHei","PingFang SC",sans-serif; color:#1f2937;
+         line-height:1.7; max-width:900px; margin:0 auto; padding:26px 30px 50px;
+         background:#fff; font-size:13.5px; }
+  h1 { font-size:25px; margin:0 0 4px; color:#111827; }
+  .sub { color:#6b7280; font-size:12.5px; margin-bottom:18px; }
+  h2 { font-size:17px; color:#1e40af; margin:32px 0 12px; border-left:4px solid #2c6bed;
+       padding-left:10px; page-break-after:avoid; }
+  h3 { font-size:14px; margin:20px 0 8px; color:#374151; page-break-after:avoid; }
+  p { margin:7px 0; }
+  ol,ul { margin:7px 0 7px 22px; padding:0; }
+  li { margin:4px 0; }
+  code { background:#f3f4f6; border:1px solid #e5e7eb; border-radius:4px;
+         padding:1px 5px; font-family:Consolas,monospace; font-size:12px; color:#1e40af; }
+  pre { background:#1f2937; color:#e5e7eb; border-radius:7px; padding:12px 14px;
+        overflow-x:auto; font-size:11.5px; line-height:1.55; margin:10px 0;
+        page-break-inside:avoid; white-space:pre-wrap; word-break:break-all; }
+  pre code { background:none; border:0; color:inherit; padding:0; font-size:inherit; }
+  table { border-collapse:collapse; width:100%; margin:10px 0 14px; page-break-inside:avoid; }
+  th,td { border:1px solid #e5e7eb; padding:7px 9px; text-align:left; font-size:12.5px;
+          vertical-align:top; }
+  th { background:#eff6ff; color:#1e3a8a; font-weight:600; }
+  .card { background:#f8fafc; border:1px solid #e5e7eb; border-radius:8px;
+          padding:12px 16px; margin:12px 0; page-break-inside:avoid; }
+  .warn { background:#fffbeb; border-color:#fde68a; }
+  .ok { background:#ecfdf5; border-color:#a7f3d0; }
+  .danger { background:#fef2f2; border-color:#fecaca; }
+  .tag { display:inline-block; padding:1px 7px; border-radius:10px; font-size:11px;
+         font-weight:600; }
+  .must { background:#dbeafe; color:#1e40af; }
+  .opt  { background:#f3f4f6; color:#4b5563; }
+  .no   { background:#fee2e2; color:#b91c1c; }
+  .toc { columns:2; column-gap:28px; }
+  .toc a { color:#2c6bed; text-decoration:none; }
+  hr { border:0; border-top:1px solid #e5e7eb; margin:24px 0; }
+  .footer { margin-top:30px; padding-top:12px; border-top:1px solid #e5e7eb;
+            color:#9ca3af; font-size:11.5px; }
+  @media print { body{padding:0;max-width:none;} pre{background:#f3f4f6;color:#111827;border:1px solid #d1d5db;} }
+</style>
+</head>
+<body>
+
+<h1>跨电脑配置、运行与开发指南</h1>
+<div class="sub">屏幕录制工具 v1.0.0 ｜ 适用：把当前项目迁移到另一台 Windows 电脑继续打开、运行、修改</div>
+
+<div class="card">
+<strong>目录</strong>
+<div class="toc">
+  0. 先分清两种"打开方式"<br>
+  1. 项目结构：哪些带、哪些不带<br>
+  2. 依赖与运行环境准备<br>
+  3. 项目文件同步（三种方案）<br>
+  4. 新电脑本地运行验证<br>
+  5. 修改后的同步与备份流程<br>
+  6. 冲突与注意事项（13 项）<br>
+  7. 一键核对清单<br>
+  附录：关键路径与校验值
+</div>
+</div>
+
+<h2>0. 先分清两种"打开方式"</h2>
+<table>
+<tr><th style="width:130px">方式</th><th>拿到什么</th><th>需要装什么</th><th>适合谁</th></tr>
+<tr><td><strong>绿色版</strong><br><span class="tag opt">只使用</span></td>
+    <td><code>ScreenRecorder_v1.0.0_green.zip</code>（51.7 MB），解压双击 <code>ScreenRecorder.exe</code></td>
+    <td><strong>什么都不用装</strong>，Windows 10/11 即可</td>
+    <td>只想录屏、不打算改代码的人</td></tr>
+<tr><td><strong>源码版</strong><br><span class="tag must">要修改</span></td>
+    <td>整个项目文件夹（源码 + FFmpeg + 验证工程）</td>
+    <td>.NET 8 SDK + 联网还原 NuGet 包</td>
+    <td>要在另一台电脑继续开发的人 ← <strong>本指南主体</strong></td></tr>
+</table>
+<p>如果对方只是录屏，把 ZIP 发过去就够了，让他看 <code>README.html</code>。下面全部内容只针对"要改代码"的场景。</p>
+
+<h2>1. 项目结构：哪些带、哪些不带</h2>
+<p>当前项目根目录：<code>E:\开发练习项目\录屏软件\</code>。真实结构如下，"是否同步"一列请严格执行。</p>
+<table>
+<tr><th style="width:215px">路径</th><th>内容</th><th style="width:78px">同步</th><th>原因</th></tr>
+<tr><td><code>ScreenRecorder\*.cs / *.xaml</code></td><td>产品全部源码（17 个文件）</td><td><span class="tag must">必须</span></td><td>产品本体</td></tr>
+<tr><td><code>ScreenRecorder\ScreenRecorder.csproj</code></td><td>工程定义、版本、NAudio 引用</td><td><span class="tag must">必须</span></td><td>决定能否编译</td></tr>
+<tr><td><code>ScreenRecorder\tools\ffmpeg.exe</code></td><td>编码组件，125.6 MB</td><td><span class="tag must">必须</span></td><td>没有它无法编码，<strong>不能单独移动</strong></td></tr>
+<tr><td><code>spike\</code>（16 个工程）</td><td>S1–S5 验证、端到端、基准、热键测试</td><td><span class="tag must">建议</span></td><td>验收工具都在这里，<code>MvpE2E</code> 是回归测试入口</td></tr>
+<tr><td><code>build-package.ps1</code></td><td>绿色版打包脚本</td><td><span class="tag must">必须</span></td><td>改完代码靠它重新出包</td></tr>
+<tr><td><code>.gitignore</code></td><td>同步忽略规则（本轮新增）</td><td><span class="tag must">必须</span></td><td>防止把个人数据和编译垃圾带过去</td></tr>
+<tr><td><code>README.html</code>、5 份阶段 HTML 文档</td><td>使用说明、规划与验证报告</td><td><span class="tag opt">建议</span></td><td>不改代码也无害，约 150 KB</td></tr>
+<tr><td><code>publish\</code></td><td>已打好的绿色包与解压目录</td><td><span class="tag no">不</span></td><td>由脚本现场生成，带过去纯属重复占空间</td></tr>
+<tr><td><code>**\bin\</code>、<code>**\obj\</code></td><td>本机编译产物</td><td><span class="tag no">不</span></td><td>含绝对路径缓存，跨机易出增量编译怪错</td></tr>
+<tr><td><code>settings.json</code>、<code>logs\</code>、<code>Videos\</code></td><td>个人配置、日志、试录视频（当前 195 MB）</td><td><span class="tag no">严禁</span></td><td>含本机路径与个人录像；过去会让新电脑按错误路径保存</td></tr>
+<tr><td><code>spike\ffmpeg6\</code>、<code>spike\ffmpeg_new\</code>、<code>*.7z</code></td><td>下载缓存与旧版备份（约 400 MB）</td><td><span class="tag no">不</span></td><td>纯临时文件，产品只用 <code>ScreenRecorder\tools\ffmpeg.exe</code></td></tr>
+</table>
+<div class="card ok"><strong>体积参考</strong>：按上面规则同步，源码包约 <strong>135 MB</strong>（其中 FFmpeg 占 126 MB）；如果把临时文件一起拷，会膨胀到 500 MB 以上。已在本轮创建 <code>.gitignore</code> 固化这套规则。</div>
+
+<h2>2. 依赖与运行环境准备</h2>
+
+<h3>2.1 必装（只有一项）</h3>
+<table>
+<tr><th style="width:150px">项目</th><th>要求</th><th>验证方法</th></tr>
+<tr><td>操作系统</td><td>Windows 10 / 11，64 位</td><td>设置 → 系统 → 关于</td></tr>
+<tr><td>.NET SDK</td><td><strong>8.0.428</strong>（当前开发机版本，建议对齐）</td><td>打开 <strong>PowerShell</strong>，运行 <code>dotnet --version</code>，应输出 <code>8.0.428</code></td></tr>
+</table>
+<div class="card warn"><strong>踩过的坑</strong>：<strong>不要用 Git Bash 跑 dotnet</strong>——它的 PATH 里没有 dotnet，会报 <code>dotnet: command not found</code>。请用 PowerShell，或一律写全路径 <code>C:\Program Files\dotnet\dotnet.exe</code>。本指南所有命令都按 PowerShell 书写。</div>
+
+<h3>2.2 联网自动获取（不用手动下载）</h3>
+<table>
+<tr><th style="width:220px">包</th><th>版本</th><th>谁用</th></tr>
+<tr><td>NAudio</td><td>2.2.1</td><td>产品工程、<code>AudioSpike</code>、<code>MvpE2E</code>、<code>TonePlayer</code></td></tr>
+<tr><td>Microsoft.Windows.CsWinRT</td><td>2.0.4</td><td>仅 <code>WPFCheck</code>、<code>S2GC</code> 两个 Graphics Capture 验证工程</td></tr>
+</table>
+<p>第一次编译会自动从 NuGet 还原。若公司网络需要代理，先在 PowerShell 配置 <code>HTTP_PROXY</code> / <code>HTTPS_PROXY</code>；否则会卡在还原阶段。还原命令（可选，提前跑）：</p>
+<pre><code>&amp; "C:\Program Files\dotnet\dotnet.exe" restore "D:\ScreenRecorder\ScreenRecorder\ScreenRecorder.csproj" --nologo</code></pre>
+
+<h3>2.3 随项目携带（不用下载）</h3>
+<p><code>ScreenRecorder\tools\ffmpeg.exe</code>，<strong>FFmpeg 6.0 full build</strong>，125.6 MB。版本很关键：这是基于 NVENC SDK 12.0 构建、能匹配当前显卡驱动 527.27 的版本。<strong>不要"顺手升级"到新版 FFmpeg</strong>——新版要求驱动 ≥610，会直接报 NVENC API 版本错误。校验值见附录。</p>
+
+<h3>2.4 可选，产品不需要</h3>
+<ul>
+<li><strong>Windows SDK 10.0.26100</strong>：只有重新验证 Graphics Capture（<code>spike\WPFCheck</code>）时才需要。产品和其余 spike 工程都不需要；而 GC 已冻结，绝大多数情况用不上。</li>
+</ul>
+
+<h3>2.5 明确不需要的</h3>
+<div class="card"><strong>无需管理员权限、无需账号密码、无需许可证、无需数据库、无需云服务、无需开放端口。</strong>程序不写注册表、不联网上传任何数据。<br>
+首次双击可能出现 Windows SmartScreen 提示（因为程序未做数字签名）：点「更多信息」→「仍要运行」即可。若单位策略禁止，需要 IT 部门放行。</div>
+
+<h2>3. 项目文件同步（三种方案）</h2>
+
+<h3>方案 A：直接拷贝源码包（推荐，最简单）</h3>
+<ol>
+<li><strong>在原电脑打包源码</strong>——打开 PowerShell，逐行执行（目标路径可自选）：
+<pre><code>$src = "E:\开发练习项目\录屏软件"
+$dst = "D:\源码包\录屏软件"
+robocopy $src $dst /E /XD bin obj .vs publish Videos logs ffmpeg6 ffmpeg_new /XF settings.json *.mp4 *.7z *.wav *.raw *.gray
+Compress-Archive -Path "$dst\*" -DestinationPath "D:\录屏软件_源码包.zip" -CompressionLevel Optimal -Force</code></pre>
+<span style="color:#6b7280">robocopy 返回码 1 表示"复制成功"，属正常现象。</span></li>
+<li><strong>拷贝 <code>D:\录屏软件_源码包.zip</code></strong> 到 U 盘或网盘，带到新电脑。</li>
+<li><strong>解压到可写目录</strong>，例如 <code>D:\ScreenRecorder\</code>。
+<div class="card danger"><strong>不要解压到 <code>C:\Program Files</code></strong>：那里默认不可写，配置 <code>settings.json</code> 和日志会失效或退到 AppData，破坏"删除目录即卸载"。</div></li>
+<li><strong>删除可能残留的编译目录</strong>（即使打包时排除了，也再确认一次）：
+<pre><code>Get-ChildItem "D:\ScreenRecorder" -Recurse -Include bin,obj -Directory | Remove-Item -Recurse -Force</code></pre></li>
+</ol>
+
+<h3>方案 B：用 Git 同步（推荐长期维护）</h3>
+<ol>
+<li>新电脑安装 Git，并在 <code>D:\ScreenRecorder</code> 打开 PowerShell。</li>
+<li>原电脑初始化并推送（<strong>仓库务必设为私有</strong>）：
+<pre><code>cd D:\ScreenRecorder
+git init
+git add .
+git status          # 核对：列表里不应出现 bin/obj/Videos/settings.json/logs
+git commit -m "initial v1.0.0"
+git remote add origin &lt;你的私有仓库地址&gt;
+git push -u origin main</code></pre></li>
+<li>新电脑拉取：<code>git clone &lt;仓库地址&gt; D:\ScreenRecorder</code></li>
+<li><strong>凭证</strong>：HTTPS 仓库需要 Git 账号 + 个人访问令牌（PAT）；SSH 仓库需要密钥对。这是整个项目唯一可能用到凭证的地方，项目本身没有任何账号体系。</li>
+</ol>
+
+<h3>方案 C：只分发绿色版</h3>
+<p>把 <code>ScreenRecorder_v1.0.0_green.zip</code> 和 <code>.sha256.txt</code> 一起发出。对方校验哈希后解压即用，不需要本指南。</p>
+
+<h2>4. 新电脑本地运行验证（三层，逐层做）</h2>
+
+<h3>第 1 层：编译通过</h3>
+<pre><code>cd D:\ScreenRecorder
+&amp; "C:\Program Files\dotnet\dotnet.exe" build "ScreenRecorder\ScreenRecorder.csproj" -c Release --nologo</code></pre>
+<p>预期：<strong>0 个警告，0 个错误</strong>。</p>
+
+<h3>第 2 层：真实引擎端到端</h3>
+<pre><code>&amp; "C:\Program Files\dotnet\dotnet.exe" build "spike\MvpE2E\MvpE2E.csproj" -c Debug --nologo
+&amp; "D:\ScreenRecorder\spike\MvpE2E\bin\Debug\net8.0-windows\MvpE2E.exe"</code></pre>
+<p>预期输出：<code>总帧数: 180</code>、耗时约 6.0 秒。再用 ffprobe 复核（ffprobe 在 <code>spike\ffmpeg6\ffmpeg-6.0-full_build\bin\</code>，若按方案 A 排除了该目录，可临时拷过来）：</p>
+<pre><code>ffprobe -v error -show_entries stream=codec_name,codec_type,nb_frames -show_entries format=duration -of default=nw=1 "输出文件.mp4"</code></pre>
+<p>预期：<code>h264 / 180 帧 / duration=6.000000</code> + <code>aac 单音轨</code>。</p>
+
+<h3>第 3 层：界面冒烟（真人五分钟）</h3>
+<ol>
+<li>双击 <code>ScreenRecorder\bin\Release\net8.0-windows\ScreenRecorder.exe</code>，界面显示「编码组件：已就绪 ✓」。</li>
+<li>点标题下方蓝色「v1.0.0 · 关于」，确认版本弹窗正常。</li>
+<li>按 <span style="font-family:Consolas">F9</span> → 等 3 秒倒计时 → 按 <span style="font-family:Consolas">F10</span>。</li>
+<li>检查三件事：<code>Videos\</code> 出现 MP4；<code>logs\run_日期.log</code> 有启动与录制记录；成片里没有悬浮控制条。</li>
+<li>正常关闭窗口，确认 <code>settings.json</code> 写入。</li>
+</ol>
+
+<h3>常见失败对照</h3>
+<table>
+<tr><th style="width:31%">现象</th><th>原因</th><th>处理</th></tr>
+<tr><td><code>dotnet: command not found</code></td><td>在 Git Bash 里执行</td><td>改用 PowerShell</td></tr>
+<tr><td><code>MSB3021 / MSB3027</code> 无法复制 exe</td><td>旧版软件还开着，锁定了 exe（<strong>本项目已发生两次</strong>）</td><td>关闭软件窗口；必要时任务管理器结束进程</td></tr>
+<tr><td>NuGet 还原卡住 / 失败</td><td>网络或代理</td><td>配置代理后重试 <code>dotnet restore</code></td></tr>
+<tr><td>界面提示「编码组件缺失」</td><td>ffmpeg 没拷或目录名不对</td><td>放回 <code>ScreenRecorder\tools\ffmpeg.exe</code></td></tr>
+<tr><td>MvpE2E 报找不到 NAudio / WPF 类型</td><td>新增依赖只加了产品工程，没加到链接工程</td><td>见第 6 节第 4 条</td></tr>
+<tr><td>热键 F9/F10 无反应</td><td>被目标电脑其他软件占用</td><td>界面黄字会提示，改用悬浮条</td></tr>
+<tr><td>提示不支持 NVENC</td><td>目标显卡/驱动不满足</td><td>自动回退 libx264 软编码，<strong>属正常</strong></td></tr>
+</table>
+
+<h2>5. 修改后的同步与备份流程</h2>
+
+<h3>5.1 改之前：先备份</h3>
+<pre><code>$date = Get-Date -Format "yyyyMMdd_HHmm"
+Copy-Item "D:\ScreenRecorder" "D:\ScreenRecorder_backup_$date" -Recurse -Force</code></pre>
+<p>命名建议 <code>ScreenRecorder_backup_20261118_1035</code>。备份保留最近 3 份即可，用完及时清理，避免磁盘膨胀。</p>
+
+<h3>5.2 改的时候：三条铁律</h3>
+<ol>
+<li>产品代码只改 <code>ScreenRecorder\</code> 下的文件；<code>spike\</code> 是验证工具，不要在里面写产品逻辑。</li>
+<li><strong>新增 NuGet 包或 WPF 依赖时，必须同步修改 <code>spike\MvpE2E\MvpE2E.csproj</code></strong>（以及链接了产品源码的 <code>PerfProbe.csproj</code>）。这两个工程用 <code>&lt;Compile Include="../../ScreenRecorder/Services/*.cs"&gt;</code> 直接吃产品源码——本项目中 NAudio 和 UseWPF 已经各踩过一次漏同步的坑。</li>
+<li>若更换 FFmpeg 版本，必须重新实测 NVENC，并更新附录的 SHA256 基线。</li>
+</ol>
+
+<h3>5.3 改之后：四步验收</h3>
+<ol>
+<li>Release 构建 0 警告 0 错误。</li>
+<li>跑 <code>MvpE2E</code>，确认 180 帧 / 6.000s / 音轨存在。</li>
+<li>界面冒烟，检查 <code>logs\</code> 没有新增 ERROR 行。</li>
+<li>重新出包（脚本会自动先构建）：
+<pre><code>powershell -ExecutionPolicy Bypass -File "D:\ScreenRecorder\build-package.ps1" -Build</code></pre></li>
+</ol>
+
+<h3>5.4 同步回另一台电脑</h3>
+<ul>
+<li><strong>Git</strong>：<code>git add . &amp;&amp; git commit -m "改动说明" &amp;&amp; git push</code>，另一台执行 <code>git pull</code>。</li>
+<li><strong>拷贝</strong>：只覆盖源码文件，<strong>不要覆盖对方的 <code>settings.json</code> 和 <code>Videos\</code></strong>；覆盖前按 5.1 备份。</li>
+<li>两边都核对一次 <code>ScreenRecorder\tools\ffmpeg.exe</code> 的哈希，防止版本漂移。</li>
+</ul>
+
+<h2>6. 冲突与注意事项（13 项，按严重度排序）</h2>
+<table>
+<tr><th style="width:23%">问题</th><th>后果</th><th>规避</th></tr>
+<tr><td>1. <code>settings.json</code> 两台互相覆盖</td><td>新电脑按旧电脑的路径保存，录到找不到的位置</td><td>永不同步此文件；换机后删除它，让程序用默认值重建</td></tr>
+<tr><td>2. 跨机拷贝 <code>bin\obj\</code></td><td>增量编译缓存含旧绝对路径，出现"明明改了却没生效"类怪错</td><td>不拷；到新机先删干净再编译</td></tr>
+<tr><td>3. 旧进程锁定 exe</td><td>编译报 MSB3021，无法出包</td><td>编译前关闭软件；脚本已内置此检查并会提示</td></tr>
+<tr><td>4. 链接工程漏加依赖</td><td>MvpE2E / PerfProbe 编译失败（NAudio、UseWPF 各踩过一次）</td><td>按 5.2 第 2 条同步 csproj</td></tr>
+<tr><td>5. FFmpeg 版本漂移</td><td>新版要求 NVENC API 13.1 / 驱动 ≥610，硬编码直接失败</td><td>只认 FFmpeg 6.0；用附录 SHA256 校验</td></tr>
+<tr><td>6. 目标机没有 NVENC</td><td>自动改软编码，CPU 占用升高但功能正常</td><td>属设计内回退，不要误判为故障</td></tr>
+<tr><td>7. 目标机没有麦克风</td><td>界面提示忽略麦克风，成片只有系统声</td><td>正常降级；有设备的机器再验讲解声</td></tr>
+<tr><td>8. 热键被占用</td><td>F9/F10 失效</td><td>界面黄字提示；用悬浮条操作</td></tr>
+<tr><td>9. 装在只读目录（Program Files）</td><td>配置和日志写不进去；"删目录即卸载"失效</td><td>解压到 <code>D:\</code> 等可写位置</td></tr>
+<tr><td>10. 误以为 GC 也要配环境</td><td>白装 Windows SDK、白配 CsWinRT</td><td>Graphics Capture 已冻结，产品工程只需 .NET 8 SDK</td></tr>
+<tr><td>11. 移动 <code>tools\ffmpeg.exe</code></td><td>编码组件缺失，无法开始录制</td><td>保持 <code>tools\</code> 与主程序同级，整目录移动</td></tr>
+<tr><td>12. 中文路径</td><td>担心乱码</td><td>当前项目本身就在中文路径 <code>E:\开发练习项目\录屏软件\</code>，实测正常，无需改名</td></tr>
+<tr><td>13. 悬浮条被录进画面</td><td>成片右侧出现控制条</td><td>已用系统级捕获排除 + 实底窗口解决；若重现请查日志与窗口样式</td></tr>
+</table>
+
+<h2>7. 一键核对清单</h2>
+<div class="card">
+□ 新电脑已装 .NET SDK 8.0.428，<code>dotnet --version</code> 验证通过<br>
+□ 源码解压在可写目录（非 Program Files）<br>
+□ <code>ScreenRecorder\tools\ffmpeg.exe</code> 存在且哈希与附录一致<br>
+□ 没有带入 <code>bin\obj\settings.json\logs\Videos\</code><br>
+□ Release 构建 0 警告 0 错误<br>
+□ MvpE2E 输出 180 帧 / 6 秒 / 含 aac 音轨<br>
+□ 界面显示「编码组件：已就绪 ✓」与「v1.0.0 · 关于」<br>
+□ F9 开始 / F10 停止可用，Videos 与 logs 自动生成<br>
+□ <code>.gitignore</code> 已随源码带过去（若用 Git）<br>
+□ 备份目录已建立，命名含日期<br>
+□ 修改涉及新依赖时，MvpE2E.csproj 已同步<br>
+□ 重新打包后 ZIP 与 SHA256 文件同时更新
+</div>
+
+<h2>附录：关键路径与校验值</h2>
+<table>
+<tr><th style="width:190px">项目</th><th>值</th></tr>
+<tr><td>当前源码根目录</td><td><code>E:\开发练习项目\录屏软件\</code></td></tr>
+<tr><td>产品主程序</td><td><code>ScreenRecorder\bin\Release\net8.0-windows\ScreenRecorder.exe</code></td></tr>
+<tr><td>编码组件（必须随行）</td><td><code>ScreenRecorder\tools\ffmpeg.exe</code> · FFmpeg 6.0 full build · 125.6 MB</td></tr>
+<tr><td>编码组件 SHA256</td><td><code>B9FB1E0934E04B91B6924DE97EDD2E1B80FC5DFA0A7F08C32B9C5CCA3A12717B</code></td></tr>
+<tr><td>绿色包 SHA256</td><td><code>C39B8883CAFC695A172828604F6827693D9293A76359CFA5B9E517F882FF22C</code>（51.7 MB，版本 v1.0.0）</td></tr>
+<tr><td>.NET SDK</td><td>8.0.428（<code>C:\Program Files\dotnet\dotnet.exe</code>）</td></tr>
+<tr><td>产品目标框架</td><td><code>net8.0-windows</code>（WPF + WinForms），<strong>不是</strong> <code>net8.0-windows10.0.26100.0</code></td></tr>
+<tr><td>端到端验证入口</td><td><code>spike\MvpE2E\MvpE2E.csproj</code></td></tr>
+<tr><td>重新打包命令</td><td><code>powershell -ExecutionPolicy Bypass -File build-package.ps1 -Build</code></td></tr>
+</table>
+
+<div class="footer">
+屏幕录制工具 v1.0.0 · 跨电脑配置与开发指南 ｜ 编制日期 2026-11-18<br>
+本指南基于当前项目真实结构与已发生的编译/环境问题编写，可直接照做。
+</div>
+
+</body>
+</html>
